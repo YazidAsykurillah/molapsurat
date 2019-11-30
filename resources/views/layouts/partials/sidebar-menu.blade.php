@@ -3,7 +3,7 @@
     <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
     <li class="nav-item">
-      <a href="{{ url('home') }}" class="nav-link active">
+      <a href="{{ url('home') }}" class="nav-link {{{ (Request::is('home') ? 'active' : '') }}}">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
           Dashboard
@@ -11,7 +11,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('surat-tugas') }}" class="nav-link">
+      <a href="{{ url('surat-tugas') }}" class="nav-link {{{ (Request::is('surat-tugas') ? 'active' : '') }}}">
         <i class="nav-icon fas fa-envelope"></i>
         <p>
           Surat Tugas
@@ -19,7 +19,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('laporan-surat-tugas') }}" class="nav-link">
+      <a href="{{ url('laporan-surat-tugas') }}" class="nav-link {{{ (Request::is('laporan-surat-tugas') ? 'active' : '') }}}">
         <i class="nav-icon fas fa-book"></i>
         <p>
           Laporan Surat Tugas
@@ -35,14 +35,14 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('user') }}" class="nav-link">
+      <a href="{{ url('user') }}" class="nav-link {{{ (Request::is('user') ? 'active' : '') }}}">
         <i class="nav-icon fas fa-users"></i>
         <p>
           Pengguna
         </p>
       </a>
     </li>
-    <li class="nav-item has-treeview">
+    <li class="nav-item has-treeview {{{ (Request::is('jenis-surat-tugas') ? 'menu-open' : '') }}}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-database"></i>
         <p>
@@ -52,7 +52,7 @@
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="{{ url('jenis-surat-tugas') }}" class="nav-link">
+          <a href="{{ url('jenis-surat-tugas') }}" class="nav-link {{{ (Request::is('jenis-surat-tugas') ? 'active' : '') }}}">
             <i class="far fa-circle nav-icon"></i>
             <p>Jenis Surat Tugas</p>
           </a>

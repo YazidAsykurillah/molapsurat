@@ -28,15 +28,11 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Buat Surat Tugas</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-          </div>
+          <h3 class="card-title">Form Buat Surat Tugas</h3>
+          <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <form method="POST" action="{{ url('surat-tugas') }}" class="form form-horizontal" enctype="multipart/form-data">
+          <form method="POST" id="form-create" action="{{ url('surat-tugas') }}" class="form form-horizontal" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group row">
@@ -137,7 +133,7 @@
                 <a href="{{ url('surat-tugas') }}" class="btn btn-default">
                   <i class="fa fa-window-close"></i> Batal
                 </a>&nbsp;
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-info" id="btn-submit">
                   <i class="fa fa-save"></i> Simpan
                 </button>
               </div>
@@ -207,6 +203,11 @@
         allowClear : true,
       }).on('select2:select', function(){
         
+      });
+
+      //Form create submission handling
+      $('#form-create').on('submit', function(){
+        $('#btn-submit').prop('disabled', true);
       });
 
     });

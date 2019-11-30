@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreSuratTugasRequest;
+use DataTables;
 use Carbon\Carbon;
 use App\SuratTugas;
-use DataTables;
 
 class SuratTugasController extends Controller
 {
@@ -47,7 +47,7 @@ class SuratTugasController extends Controller
                 $action.= '<a href="'.url('surat-tugas/'.$surat_tugas->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
                 $action.=   '<i class="fa fa-edit"></i>';
                 $action.= '</a> &nbsp;';
-                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$surat_tugas->id.'" title="Hapus">';
+                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$surat_tugas->id.'" data-nomor="'.$surat_tugas->nomor.'" title="Hapus">';
                 $action.=   '<i class="fa fa-trash"></i>';
                 $action.= '</a>';
                 return $action;
@@ -88,7 +88,7 @@ class SuratTugasController extends Controller
         $surat_tugas->attachment = $attachment;
         $surat_tugas->save();
         return redirect('surat-tugas/'.$surat_tugas->id)
-            ->with('successMessage', "Berhasil");
+            ->with('successMessage', "Berhasil membuat surat tugas");
     }
 
     protected function upload_surat_tugas_attachment($request)
@@ -145,5 +145,20 @@ class SuratTugasController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function delete(Request $request)
+    {   
+        $attachment_to_delete = NULL;
+        $surat_tugas = SuratTugas::findOrFail($request->id_to_delete);
+        $attachment_to_delete = $surat_tugas->attachment != NULL ? $attachment_to_delete ='files/surat-tugas/'.$surat_tugas->attachment : $attachment_to_delete = NULL;
+        if($surat_tugas->delete()){
+            if($attachment_to_delete != NULL){
+                unlink($attachment_to_delete);    
+            }
+            return redirect('surat-tugas')
+                ->with('successMessage', "Surat tugas dihapus");
+        }
+
     }
 }

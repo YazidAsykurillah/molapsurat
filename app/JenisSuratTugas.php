@@ -10,4 +10,10 @@ class JenisSuratTugas extends Model
     protected $fillable = [
     	'judul',  'deskripsi'
     ];
+
+
+    public function surat_tugas()
+    {
+    	return $this->hasMany('App\SuratTugas');
+    }
 }

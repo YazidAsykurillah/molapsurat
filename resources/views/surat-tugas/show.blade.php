@@ -21,10 +21,10 @@
 
 @section('content')
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Detail Surat Tugas</h3>
+          <h3 class="card-title">Informasi Surat Tugas</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="fas fa-minus"></i>
@@ -32,51 +32,45 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table table-bordered">
-            <tbody>
-              <tr>
-                <td style="width: 20%;">Nomor</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{{ $surat_tugas->nomor }}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Jenis Surat</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{{ $surat_tugas->jenis_surat_tugas->judul }}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Tujuan Surat</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{{ $surat_tugas->tujuan_surat_tugas->nama }}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Tanggal Mulai</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{{ $surat_tugas->tanggal_mulai }}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Tanggal Selesai</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{{ $surat_tugas->tanggal_selesai }}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Uraian</td>
-                <td style="width: 5%;">:</td>
-                <td style="">{!! $surat_tugas->uraian !!}</td>
-              </tr>
-              <tr>
-                <td style="width: 20%;">Attachment</td>
-                <td style="width: 5%;">:</td>
-                <td style="">
-                  @if($surat_tugas->attachment)
-                  <a href="{{ url('files/surat-tugas') }}/{{$surat_tugas->attachment}}">View</a>
-                  @endif
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <p class="">Nomor Surat Tugas
+            <b class="d-block">{{ $surat_tugas->nomor }}</b>
+          </p>
+          <p class="">Jenis Surat
+            <b class="d-block">{{ $surat_tugas->jenis_surat_tugas->judul }}</b>
+          </p>
+          <p class="">Tujuan Surat
+            <b class="d-block">{{ $surat_tugas->tujuan_surat_tugas->nama }}</b>
+          </p>
+          <p class="">Tanggal Mulai
+            <b class="d-block">{{ $surat_tugas->tanggal_mulai }}</b>
+          </p>
+          <p class="">Tanggal Selesai
+            <b class="d-block">{{ $surat_tugas->tanggal_selesai }}</b>
+          </p>
+          <p class="">Uraian
+            <b class="d-block">{{ $surat_tugas->uraian }}</b>
+          </p>
         </div>
         <div class="card-footer clearfix"></div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Attachment</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          @if($surat_tugas->attachment)
+            <a href="{{ url('files/surat-tugas') }}/{{$surat_tugas->attachment}}">
+              <i class="fa fa-file"></i>
+            </a>
+          @endif
+        </div>
       </div>
     </div>
   </div>

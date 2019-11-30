@@ -11,4 +11,9 @@ class TujuanSuratTugas extends Model
     protected $fillable = [
     	'nama', 'alamat'
     ];
+
+    public function surat_tugas()
+    {
+    	return $this->hasMany('App\SuratTugas');
+    }
 }

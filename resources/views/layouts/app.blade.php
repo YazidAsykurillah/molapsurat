@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{{ url('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{ url('plugins/jqvmap/jqvmap.min.css') }}">
+  <!-- SweetAlert2 -->
+  <!-- <link rel="stylesheet" href="{{ url('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}"> -->
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('dist/css/adminlte.min.css') }}">
   <!-- overlayScrollbars -->
@@ -31,6 +33,7 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- DataTables -->
   <link rel="stylesheet" href="{{ url('plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
+  
   @yield('additional_styles')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -81,6 +84,24 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <!--Flash Session message-->
+        <div class="row">
+          <div class="col-md-12">
+            @if(Session::has('successMessage'))
+              <div class="alert alert-success alert-dismissible" role="alert" id="alert-success">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <strong>Success...!</strong> <span id="success-info"> {{ Session::get('successMessage') }}</span>
+              </div>
+            @endif
+            @if(Session::has('errorMessage'))
+              <div class="alert alert-danger alert-dismissible" role="alert" id="alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <strong>Error...!</strong> <span id="error-info"> {{ Session::get('errorMessage') }}</span>
+              </div>
+            @endif
+          </div>
+        </div>
+        <!--//Flash Session message-->
         @yield('content')
       </div><!-- /.container-fluid -->
     </section>
@@ -107,6 +128,8 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ url('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- SweetAlert2 -->
+<!-- <script src="{{ url('plugins/sweetalert2/sweetalert2.min.js') }}"></script> -->
 <!-- Select2 -->
 <script src="{{ url('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- ChartJS -->

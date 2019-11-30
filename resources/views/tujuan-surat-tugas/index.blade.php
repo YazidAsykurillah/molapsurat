@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('pageTitle')
-  Daftar Surat Tugas
+  Tujuan Surat Tugas
 @endsection
 
 @section('content-header')
   <div class="row mb-2">
     <div class="col-md-6">
-      <h1 class="m-0 text-dark">Daftar Surat Tugas</h1>
+      <h1 class="m-0 text-dark">Tujuan Surat Tugas</h1>
     </div>
     <div class="col-md-6">
       <ol class="breadcrumb float-md-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('surat-tugas') }}">Surat Tugas</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('tujuan-surat-tugas') }}">Tujuan Surat Tugas</a></li>
         <li class="breadcrumb-item active">Index</li>
       </ol>
     </div>
@@ -24,10 +24,10 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Daftar Surat Tugas</h3>
+          <h3 class="card-title">Tujuan Surat Tugas</h3>
           <div class="card-tools">
-            <a class="btn btn-info btn-xs" href="{{ url('surat-tugas/create') }}" data-toggle="tooltip" title="Buat surat tugas baru">
-              <i class="fa fa-plus-circle"></i> Buat Surat Tugas
+            <a class="btn btn-info btn-xs" href="{{ url('tujuan-surat-tugas/create') }}" data-toggle="tooltip" title="Buat Tujuan Surat Tugas baru">
+              <i class="fa fa-plus-circle"></i> Tambah
             </a>
           </div>
         </div>
@@ -37,13 +37,8 @@
               <thead>
                 <tr>
                   <th style="width: 7%; text-align: center;">#</th>
-                  <th>Nomor</th>
-                  <th>Jenis Surat</th>
-                  <th>Tujuan</th>
-                  <th>Uraian</th>
-                  <th>Tanggal Mulai</th>
-                  <th>Tanggal Selesai</th>
-                  <th style="width: 5%; text-align: center;">Attachment</th>
+                  <th>Nama</th>
+                  <th>Alamat</th>
                   <th style="width:10%;text-align: center;">Action</th>
                 </tr>
               </thead>
@@ -56,11 +51,11 @@
     </div>
   </div>
 
-  <!--Modal Delete Surat Tugas-->
-  <div class="modal fade" id="modal-delete-surat-tugas">
+  <!--Modal Delete Tujuan Surat Tugas-->
+  <div class="modal fade" id="modal-delete-tujuan-surat-tugas">
     <div class="modal-dialog">
       <div class="modal-content bg-warning">
-        <form id="form-delete-surat-tugas" class="form form-horizontal" method="POST" action="{{ url('surat-tugas/delete') }}">
+        <form id="form-delete-tujuan-surat-tugas" class="form form-horizontal" method="POST" action="{{ url('tujuan-surat-tugas/delete') }}">
           @csrf
           <div class="modal-header">
             <h4 class="modal-title">Konfirmasi</h4>
@@ -80,7 +75,7 @@
       </div>
     </div>
   </div>
-  <!--ENDModal Delete Surat Tugas-->
+  <!--ENDModal Delete Tujuan Surat Tugas-->
 @endsection
 
 
@@ -90,38 +85,27 @@
       var table = $('#table').DataTable({
         processing :true,
         serverSide : true,
-        ajax : '{!! url('surat-tugas/datatables') !!}',
+        ajax : '{!! url('tujuan-surat-tugas/datatables') !!}',
         columns :[
           {data: 'rownum', name: 'rownum', searchable:false},
-          {data: 'nomor', name: 'nomor', render:function(data, type, row, meta){
-            return '<a href="{{ url('surat-tugas') }}/'+row.id+'">'+data+'</a>';
+          {data: 'nama', name: 'nama', render:function(data, type, row, meta){
+            return '<a href="{{ url('tujuan-surat-tugas') }}/'+row.id+'">'+data+'</a>';
           }},
-          {data: 'judul_jenis_surat_tugas', name: 'jenis_surat_tugas.judul'},
-          {data: 'nama_tujuan_surat_tugas', name: 'tujuan_surat_tugas.nama'},
-          {data: 'uraian', name: 'uraian'},
-          {data: 'tanggal_mulai', name: 'tanggal_mulai'},
-          {data: 'tanggal_selesai', name: 'tanggal_selesai'},
-          {data: 'attachment', name: 'attachment', searchable:false, orderable:false, render:function(data, type, row, meta){
-            if(data!=null){
-              return '<a href="{{ url('files')}}/surat-tugas/'+data+'"><i class="fa fa-file"></i></a>';  
-            }else{
-              return null;
-            }
-          }},
+          {data: 'alamat', name: 'alamat'},
           {data: 'action', name: 'action', searchable:false, orderable:false},
         ],
         columnDefs: [
-          { className: "text-center", "targets": [ 0, 7, 8 ] }
+          { className: "text-center", "targets": [ 0,3 ] }
         ]
       });
 
       table.on('click', '.btn-delete', function(e){
         event.preventDefault();
         var id = $(this).attr('data-id');
-        var nomor = $(this).attr('data-nomor');
-        $('.confirmation_text').html('Surat Tugas <strong>'+nomor+'</strong> akan dihapus');
-        $('#form-delete-surat-tugas').find('#id_to_delete').val(id);
-        $('#modal-delete-surat-tugas').modal('show');
+        var nama = $(this).attr('data-nama');
+        $('.confirmation_text').html('Tujuan Surat Tugas <strong>'+nama+'</strong> akan dihapus');
+        $('#form-delete-tujuan-surat-tugas').find('#id_to_delete').val(id);
+        $('#modal-delete-tujuan-surat-tugas').modal('show');
       });
 
     });
