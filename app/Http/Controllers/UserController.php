@@ -130,4 +130,18 @@ class UserController extends Controller
     {
         //
     }
+
+    public function select2(Request $request)
+    {
+        $data = [];
+        if($request->has('q')){
+            $search = $request->q;
+            $data = User::where('name', 'LIKE', "%$search%")
+                    ->get();
+        }
+        else{
+            $data = User::get();
+        }
+        return response()->json($data);
+    }
 }

@@ -23,4 +23,8 @@ class SuratTugas extends Model
     {
     	return $this->belongsTo('App\TujuanSuratTugas');
     }
+
+    public function users(){
+        return $this->belongsToMany('App\User', 'surat_tugas_user')->withPivot('position');
+    }
 }

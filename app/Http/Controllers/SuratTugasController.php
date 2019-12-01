@@ -8,6 +8,9 @@ use DataTables;
 use Carbon\Carbon;
 use App\SuratTugas;
 
+use Event;
+use App\Events\SuratTugasIsDeleted;
+
 class SuratTugasController extends Controller
 {
 
@@ -61,8 +64,10 @@ class SuratTugasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('surat-tugas.create');
+    {   $user_options = \App\User::all();
+        $position_options = config('surat_tugas.position_options');
+        return view('surat-tugas.create')
+            ->with('position_options', $position_options);
     }
 
     /**
@@ -87,6 +92,18 @@ class SuratTugasController extends Controller
         $surat_tugas->uraian = $request->uraian;
         $surat_tugas->attachment = $attachment;
         $surat_tugas->save();
+
+        //store to surat_tugas_user table
+        $data_team = [];
+        foreach($request->user_id as $key=>$val){
+            $data_team[] = [
+                'surat_tugas_id'=>$surat_tugas->id,
+                'user_id'=>$request->user_id[$key],
+                'position'=>$request->position[$key],
+            ];
+        }
+        \DB::table('surat_tugas_user')->insert($data_team);
+
         return redirect('surat-tugas/'.$surat_tugas->id)
             ->with('successMessage', "Berhasil membuat surat tugas");
     }
@@ -156,6 +173,9 @@ class SuratTugasController extends Controller
             if($attachment_to_delete != NULL){
                 unlink($attachment_to_delete);    
             }
+            //Fire event Surat Tugas is deleted
+            Event::fire(new SuratTugasIsDeleted($surat_tugas));
+            
             return redirect('surat-tugas')
                 ->with('successMessage', "Surat tugas dihapus");
         }

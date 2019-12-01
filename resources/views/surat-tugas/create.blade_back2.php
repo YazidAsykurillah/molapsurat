@@ -269,23 +269,14 @@
       $('#btn-add-team').on('click', function(event){
         event.preventDefault();
         $('.select2-user').select2("destroy");
+        var firstSelect2Position = $('#table-team').find('.select2-position').first().clone(true);
+
         var markupteam = '<tr>';
             markupteam+=  '<td>';
             markupteam+=    '<select name="user_id[]" class="form-control select2-user" required>';
             markupteam+=    '</select>';
             markupteam+=  '</td>';
             markupteam+=  '<td>';
-            markupteam+=    '<select name="position[]" class="form-control" required>';
-            markupteam+=      '<option value="">---Select Position--</option>';
-            markupteam+=      '<option value="Penasehat/Pelindung">Penasehat/Pelindung</option>';
-            markupteam+=      '<option value="Koordinator">Koordinator</option>';
-            markupteam+=      '<option value="Penanggung Jawab Administrasi">Penanggung Jawab Administrasi</option>';
-            markupteam+=      '<option value="Pengendali Teknis">Pengendali Teknis</option>';
-            markupteam+=      '<option value="Ketua Tim">Ketua Tim</option>';
-            markupteam+=      '<option value="Anggota">Anggota</option>';
-            markupteam+=      '<option value="Seketariat">Seketariat</option>';
-            markupteam+=      '<option value="Pengendali Mutu">Pengendali Mutu</option>';
-            markupteam+=    '</select>';
             markupteam+=  '</td>';
             markupteam+=  '<td>';
             markupteam+=    '<button type="button" class="btn btn-danger btn-xs btn-delete-team">';
@@ -293,6 +284,8 @@
             markupteam+=    '</button>';
             markupteam+=  '</td>';
             markupteam+= '</tr>';
+            
+            console.log($(markupteam).find('td:eq(1)'));
 
         $("#table-team tbody").append(markupteam);
 

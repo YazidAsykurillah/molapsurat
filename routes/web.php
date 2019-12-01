@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('surat-tugas', 'SuratTugasController');
 
 	//User
+	Route::get('user/select2', 'UserController@select2');
 	Route::get('user/datatables', 'UserController@datatables');
 	Route::resource('user', 'UserController');
 

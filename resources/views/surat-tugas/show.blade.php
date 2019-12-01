@@ -21,7 +21,7 @@
 
 @section('content')
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-7">
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Informasi Surat Tugas</h3>
@@ -50,14 +50,23 @@
           <p class="">Uraian
             <b class="d-block">{{ $surat_tugas->uraian }}</b>
           </p>
+          <p class="">Attachment
+            <b class="d-block">
+              @if($surat_tugas->attachment)
+              <a href="{{ url('files/surat-tugas') }}/{{$surat_tugas->attachment}}">
+                <i class="fa fa-file"></i>
+              </a>
+            @endif
+            </b>
+          </p>
         </div>
         <div class="card-footer clearfix"></div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-5">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Attachment</h3>
+          <h3 class="card-title">Team</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="fas fa-minus"></i>
@@ -65,11 +74,28 @@
           </div>
         </div>
         <div class="card-body">
-          @if($surat_tugas->attachment)
-            <a href="{{ url('files/surat-tugas') }}/{{$surat_tugas->attachment}}">
-              <i class="fa fa-file"></i>
-            </a>
-          @endif
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Posisi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if($surat_tugas->users->count())
+                @foreach($surat_tugas->users as $user)
+                <tr>
+                  <td>{{ $user->name }}</td>
+                  <td>{{ $user->pivot->position }}</td>
+                </tr>
+                @endforeach
+              @else
+                <tr>
+                  <td colspan="2">No data available</td>
+                </tr>
+              @endif
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
