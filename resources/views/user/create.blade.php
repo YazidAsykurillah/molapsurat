@@ -24,37 +24,54 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Tambah Pengguna</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-          </div>
+          <h3 class="card-title">Form Tambah Pengguna</h3>
+          <div class="card-tools"></div>
         </div>
         <div class="card-body">
           <form method="POST" action="{{ url('user') }}" class="form-horizontal">
             @csrf
             <div class="form-group row">
-                <label for="name" class="col-sm-2 col-form-label">{{ __('Name') }}</label>
-                <div class="col-md-6">
-                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" autofocus>
-                    @if ($errors->has('name'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('name') }}</strong>
-                        </span>
-                    @endif
-                </div>
+              <label for="name" class="col-sm-2 col-form-label">{{ __('Name') }}</label>
+              <div class="col-md-6">
+                  <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" autofocus>
+                  @if ($errors->has('name'))
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $errors->first('name') }}</strong>
+                      </span>
+                  @endif
+              </div>
             </div>
             <div class="form-group row">
-                <label for="email" class="col-sm-2 col-form-label">{{ __('Email') }}</label>
-                <div class="col-md-6">
-                    <input id="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" autofocus>
-                    @if ($errors->has('email'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('email') }}</strong>
-                        </span>
+              <label for="email" class="col-sm-2 col-form-label">{{ __('Email') }}</label>
+              <div class="col-md-6">
+                  <input id="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}">
+                  @if ($errors->has('email'))
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $errors->first('email') }}</strong>
+                      </span>
+                  @endif
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="role_id" class="col-sm-2 col-form-label">{{ __('Jabatan') }}</label>
+              <div class="col-md-6">
+                  <select name="role_id" id="role_id" class="form-control {{ $errors->has('role_id') ? ' is-invalid' : '' }}">
+                    <option value="{{old('role_id') ? old('role_id') : '' }}">
+                      {{old('role_id') ? \App\Role::find(old('role_id'))->name : '---Select Role---'}}
+                    </option>
+                    @if($roles->count())
+                      @foreach($roles as $role)
+                      <option value="{{ $role->id}}">{{$role->name}}</option>
+                      @endforeach
                     @endif
-                </div>
+                  </select>
+                  @if ($errors->has('role_id'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('role_id') }}</strong>
+                    </span>
+                  @endif
+              </div>
             </div>
 
             <div class="form-group row">
@@ -80,20 +97,7 @@
 @section('additional_scripts')
   <script type="text/javascript">
     $(document).ready(function(){
-      $('#table').DataTable({
-        processing :true,
-        serverSide : true,
-        ajax : '{!! url('user/datatables') !!}',
-        columns :[
-          {data: 'rownum', name: 'rownum', searchable:false},
-          {data: 'name', name: 'name'},
-          {data: 'email', name: 'email'},
-          {data: 'action', name: 'action', searchable:false, orderable:false},
-        ],
-        columnDefs: [
-          { className: "text-center", "targets": [ 3 ] }
-        ]
-      });
+      
     });
   </script>
 @endsection

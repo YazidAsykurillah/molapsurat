@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('pageTitle')
-  Daftar Pengguna
+  Permissions
 @endsection
 
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0 text-dark">Daftar Pengguna</h1>
+      <h1 class="m-0 text-dark">Permissions</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Pengguna</li>
+        <li class="breadcrumb-item active">Permissions</li>
       </ol>
     </div>
   </div>
@@ -23,11 +23,11 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Daftar Pengguna</h3>
+          <h3 class="card-title">Permissions</h3>
           <div class="card-tools">
-            <a class="btn btn-info btn-sm" href="{{ url('user/create') }}">
-              Tambah Pengguna
-            </a>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
           </div>
         </div>
         <div class="card-body">
@@ -36,9 +36,8 @@
               <thead>
                 <tr>
                   <th style="width: 7%;">#</th>
-                  <th>Nama</th>
-                  <th>Email</th>
-                  <th>Jabatan</th>
+                  <th>Slug</th>
+                  <th>Description</th>
                   <th style="text-align: center;">Action</th>
                 </tr>
               </thead>
@@ -46,7 +45,11 @@
             </table>
           </div>
         </div>
-        <div class="card-footer clearfix"></div>
+        <div class="card-footer clearfix">
+          <a class="btn btn-info btn-sm" href="{{ url('permission/create') }}">
+            Create Permission
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -59,16 +62,17 @@
       $('#table').DataTable({
         processing :true,
         serverSide : true,
-        ajax : '{!! url('user/datatables') !!}',
+        ajax : '{!! url('permission/datatables') !!}',
         columns :[
           {data: 'rownum', name: 'rownum', searchable:false},
-          {data: 'name', name: 'name'},
-          {data: 'email', name: 'email'},
-          {data: 'roles', name: 'roles.name'},
+          {data: 'slug', name: 'slug', render:function(data, type, row, meta){
+            return '<a href="{{ url('permission') }}/'+row.id+'">'+data+'</a>';
+          }},
+          {data: 'description', name: 'description'},
           {data: 'action', name: 'action', searchable:false, orderable:false},
         ],
         columnDefs: [
-          { className: "text-center", "targets": [ 4 ] }
+          { className: "text-center", "targets": [ 3 ] }
         ]
       });
     });

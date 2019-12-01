@@ -63,6 +63,18 @@
             <p>Tujuan Surat Tugas</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ url('role') }}" class="nav-link {{{ (Request::is('role') ? 'active' : '') }}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Jabatan</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url('permission') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Permission</p>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>

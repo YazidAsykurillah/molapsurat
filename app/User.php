@@ -26,4 +26,30 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function roles(){
+
+        return $this->belongsToMany('App\Role');
+    }
+
+    //----Authorization blocks--
+    public function hasRole($role)
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+        if (is_string($role)) {
+            return $this->role->contains('name', $role);
+        }
+        return !! $this->roles->intersect($role)->count();
+    }
+
+    public function isSuperAdmin()
+    {
+       if ($this->roles->contains('name', 'Super Admin')) {
+            return true;
+        }
+        return false;
+    }
+    //----ENDAuthorization blocks---
 }

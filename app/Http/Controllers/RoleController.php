@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\StoreRoleRequest;
 use DataTables;
 
-use App\User;
 use App\Role;
+use App\Permission;
 
-
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,40 +18,33 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        return view('role.index');
     }
 
-    //return datatables object
     public function datatables(Request $request)
     {
         \DB::statement(\DB::raw('set @rownum=0'));
-        $user = User::with(['roles'])->select([
+        $roles = Role::select([
             \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-            'users.*'
-        ]);
+            'roles.*'
+        ])->where('code','!=', 'SUP');
 
-        return DataTables::eloquent($user)
-            ->addColumn('rownum', function($user){
+        return DataTables::eloquent($roles)
+            ->addColumn('rownum', function($roles){
                 return '#';
             })
-            ->addColumn('roles', function (User $user) {
-                return $user->roles->map(function($role) {
-                    return str_limit($role->name, 30, '...');
-                })->implode('<br>');
-            })
-            ->addColumn('action', function($user){
+            ->addColumn('action', function($roles){
                 $action = '';
-                $action.= '<a href="'.url('user/'.$user->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
+                $action.= '<a href="'.url('role/'.$roles->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
                 $action.=   '<i class="fa fa-edit"></i>';
                 $action.= '</a> &nbsp;';
-                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$user->id.'" title="Hapus">';
+                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$roles->id.'" data-code="'.$roles->code.'" title="Hapus">';
                 $action.=   '<i class="fa fa-trash"></i>';
                 $action.= '</a>';
                 return $action;
             })
             ->make(true);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -60,9 +52,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
-        return view('user.create')
-            ->with('roles', $roles);
+        return view('role.create');
     }
 
     /**
@@ -71,19 +61,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreRoleRequest $request)
     {
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt('12345');
-        $user->save();
-        
-        //attach role_user table
-        $data_role_user = ['role_id'=>$request->role_id, 'user_id'=>$user->id];
-        \DB::table('role_user')->insert($data_role_user);
-        return redirect('user')
-            ->with('successMessage', "Pengguna telah tersimpan");
+        $role = new Role;
+        $role->code = $request->code;
+        $role->name = $request->name;
+        $role->label = $request->label;
+        $role->save();
+        return redirect('role/'.$role->id)
+            ->with('successMessage', "Role tersimpan");
     }
 
     /**
@@ -94,7 +80,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all();
+        return view('role.show')
+            ->with('role', $role)
+            ->with('permissions', $permissions);
     }
 
     /**
@@ -129,5 +119,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateRolePermission(Request $request)
+    {
+        $role_id = $request->role_id;
+        $role = Role::find($role_id);
+        $role->permissions()->detach();
+        $role->permissions()->attach($request->permission_id);
+        return redirect('role/'.$role_id);
     }
 }
