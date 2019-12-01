@@ -38,6 +38,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('surat-tugas/datatables', 'SuratTugasController@datatables');
 	Route::resource('surat-tugas', 'SuratTugasController');
 
+	//Laporan Surat Tugas
+	Route::get('laporan-surat-tugas/select2SuratTugas', 'LaporanSuratTugasController@select2SuratTugas');
+	Route::get('laporan-surat-tugas/datatables', 'LaporanSuratTugasController@datatables');
+	Route::resource('laporan-surat-tugas', 'LaporanSuratTugasController');
+
 	//User
 	Route::get('user/select2', 'UserController@select2');
 	Route::get('user/datatables', 'UserController@datatables');
