@@ -15,6 +15,6 @@ class LaporanSuratTugas extends Model
 
     public function surat_tugas()
     {
-    	return $this->belongsTo('App\SuratTugas');
+    	return $this->belongsTo('App\SuratTugas')->withDefault();
     }
 }

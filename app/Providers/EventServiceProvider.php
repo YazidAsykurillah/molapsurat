@@ -15,6 +15,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\SuratTugasIsDeleted' => [
             'App\Listeners\DetachSuratTugasUser',
+            'App\Listeners\RemoveLaporanSuratTugas',
         ],
     ];
 

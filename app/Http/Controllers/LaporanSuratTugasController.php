@@ -149,11 +149,11 @@ class LaporanSuratTugasController extends Controller
         $data = [];
         if($request->has('q')){
             $search = $request->q;
-            $data = SuratTugas::where('nomor', 'LIKE', "%$search%")
+            $data = SuratTugas::doesnthave('laporan_surat_tugas')->where('nomor', 'LIKE', "%$search%")
                     ->get();
         }
         else{
-            $data = SuratTugas::get();
+            $data = SuratTugas::doesnthave('laporan_surat_tugas')->with(['jenis_surat_tugas', 'tujuan_surat_tugas', 'users'])->get();
         }
         return response()->json($data);
     }

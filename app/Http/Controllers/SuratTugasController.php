@@ -171,7 +171,10 @@ class SuratTugasController extends Controller
         $attachment_to_delete = $surat_tugas->attachment != NULL ? $attachment_to_delete ='files/surat-tugas/'.$surat_tugas->attachment : $attachment_to_delete = NULL;
         if($surat_tugas->delete()){
             if($attachment_to_delete != NULL){
-                unlink($attachment_to_delete);    
+                if(file_exists($attachment_to_delete)){
+                    unlink($attachment_to_delete);
+                }
+                
             }
             //Fire event Surat Tugas is deleted
             Event::fire(new SuratTugasIsDeleted($surat_tugas));

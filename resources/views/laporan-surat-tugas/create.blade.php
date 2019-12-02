@@ -21,7 +21,7 @@
 
 @section('content')
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-7">
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Form Buat Laporan Surat Tugas</h3>
@@ -32,8 +32,8 @@
             @csrf
 
             <div class="form-group row">
-              <label for="surat_tugas_id" class="col-sm-2 col-form-label">{{ __('Surat Tugas') }}</label>
-              <div class="col-md-4">
+              <label for="surat_tugas_id" class="col-md-6 col-form-label">{{ __('Surat Tugas') }}</label>
+              <div class="col-md-6">
                 <select name="surat_tugas_id" id="surat_tugas_id" class="form-control"></select>
                 @if ($errors->has('surat_tugas_id'))
                     <span class="d-block invalid-feedback" role="alert">
@@ -44,8 +44,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="tanggal_approve_ketua_tim" class="col-sm-2 col-form-label">{{ __('Tanggal Approve Ketua Tim') }}</label>
-              <div class="col-md-4">
+              <label for="tanggal_approve_ketua_tim" class="col-md-6 col-form-label">{{ __('Tanggal Approve Ketua Tim') }}</label>
+              <div class="col-md-6">
                 <input id="tanggal_approve_ketua_tim" type="text" class="form-control{{ $errors->has('tanggal_approve_ketua_tim') ? ' is-invalid' : '' }}" name="tanggal_approve_ketua_tim" value="{{ old('tanggal_approve_ketua_tim') }}">
                 @if ($errors->has('tanggal_approve_ketua_tim'))
                     <span class="d-block invalid-feedback" role="alert">
@@ -56,8 +56,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="tanggal_approve_pengendali_mutu" class="col-sm-2 col-form-label">{{ __('Tanggal Approve Pengendali Mutu') }}</label>
-              <div class="col-md-4">
+              <label for="tanggal_approve_pengendali_mutu" class="col-md-6 col-form-label">{{ __('Tanggal Approve Pengendali Mutu') }}</label>
+              <div class="col-md-6">
                 <input id="tanggal_approve_pengendali_mutu" type="text" class="form-control{{ $errors->has('tanggal_approve_pengendali_mutu') ? ' is-invalid' : '' }}" name="tanggal_approve_pengendali_mutu" value="{{ old('tanggal_approve_pengendali_mutu') }}">
                 @if ($errors->has('tanggal_approve_pengendali_mutu'))
                     <span class="d-block invalid-feedback" role="alert">
@@ -68,8 +68,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="tanggal_approve_pengendali_teknis" class="col-sm-2 col-form-label">{{ __('Tanggal Approve Pengendali Teknis') }}</label>
-              <div class="col-md-4">
+              <label for="tanggal_approve_pengendali_teknis" class="col-md-6 col-form-label">{{ __('Tanggal Approve Pengendali Teknis') }}</label>
+              <div class="col-md-6">
                 <input id="tanggal_approve_pengendali_teknis" type="text" class="form-control{{ $errors->has('tanggal_approve_pengendali_teknis') ? ' is-invalid' : '' }}" name="tanggal_approve_pengendali_teknis" value="{{ old('tanggal_approve_pengendali_teknis') }}">
                 @if ($errors->has('tanggal_approve_pengendali_teknis'))
                     <span class="d-block invalid-feedback" role="alert">
@@ -80,8 +80,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="attachment" class="col-sm-2 col-form-label">{{ __('Attachment') }}</label>
-              <div class="col-md-4">
+              <label for="attachment" class="col-md-6 col-form-label">{{ __('Attachment') }}</label>
+              <div class="col-md-6">
                 <input type="file" name="attachment" class="form-control">
                 @if ($errors->has('attachment'))
                     <span class="d-block invalid-feedback" role="alert">
@@ -92,7 +92,7 @@
             </div>
 
             <div class="form-group row">
-              <label for="" class="col-sm-2 col-form-label"></label>
+              <label for="" class="col-md-6 col-form-label"></label>
               <div class="col-sm-10">
                 <a href="{{ url('laporan-surat-tugas') }}" class="btn btn-default">
                   <i class="fa fa-window-close"></i> Batal
@@ -108,6 +108,18 @@
         <div class="card-footer clearfix"></div>
       </div>
     </div>
+
+    <!--Column selected surat tugas-->
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Surat Tugas Terpilih</h3>
+          <div class="card-tools"></div>
+        </div>
+        <div class="card-body" id="card-body-selected-surat-tugas"></div>
+      </div>
+    </div>
+    <!--ENDColumn selected surat tugas-->
   </div>
 @endsection
 
@@ -129,13 +141,19 @@
           url: '{!! url('laporan-surat-tugas/select2SuratTugas') !!}',
           dataType: 'json',
           delay: 250,
-          processResults: function (data) {
+          processResults: function(data){
             return {
-              results:  $.map(data, function (item) {
-                    return {
-                        text: item.nomor,
-                        id: item.id,
-                    }
+              results: $.map(data, function(item){
+                  return {
+                      text: item.nomor,
+                      id: item.id,
+                      uraian: item.uraian,
+                      tanggal_mulai: item.tanggal_mulai,
+                      tanggal_selesai: item.tanggal_selesai,
+                      jenis_surat_tugas:item.jenis_surat_tugas,
+                      tujuan_surat_tugas:item.tujuan_surat_tugas,
+                      users:item.users
+                  }
                 })
             };
           },
@@ -143,8 +161,61 @@
         },
         allowClear : true,
       }).on('select2:select', function(){
-        
+        // $('#card-body-selected-surat-tugas').html('GGG');
+        var selected_surat_tugas = $('#surat_tugas_id').select2('data')[0];
+        console.log(selected_surat_tugas);
+        //define selected surat_tugas_html
+        var sshtml ='';
+            sshtml+='<p class=""> Nomor Surat Tugas';
+            sshtml+=  '<b class="d-block">';
+            sshtml+=    selected_surat_tugas.text;
+            sshtml+=  '</b>';
+            sshtml+='</p>';
+            sshtml+='<p class=""> Jenis Surat Tugas';
+            sshtml+=  '<b class="d-block">';
+            sshtml+=    selected_surat_tugas.jenis_surat_tugas.judul;
+            sshtml+=  '</b>';
+            sshtml+='</p>';
+            sshtml+='<p class=""> Tujuan Surat Tugas';
+            sshtml+=  '<b class="d-block">';
+            sshtml+=    selected_surat_tugas.tujuan_surat_tugas.nama;
+            sshtml+=  '</b>';
+            sshtml+='</p>';
+            sshtml+='<p class=""> Tanggal Mulai';
+            sshtml+=  '<b class="d-block">';
+            sshtml+=    selected_surat_tugas.tanggal_mulai;
+            sshtml+=  '</b>';
+            sshtml+='</p>';
+            sshtml+='<p class=""> Tanggal Selesai';
+            sshtml+=  '<b class="d-block">';
+            sshtml+=    selected_surat_tugas.tanggal_selesai;
+            sshtml+=  '</b>';
+            sshtml+='</p>';
+            sshtml+='<p class="">Team</p>';
+            sshtml+='<table class="table">';
+            sshtml+=  '<thead>';
+            sshtml+=    '<tr>';
+            sshtml+=      '<th>Nama</th>';
+            sshtml+=      '<th>Posisi</th>';
+            sshtml+=    '</tr>';
+            sshtml+=  '</thead>';
+            sshtml+=  '<tbody>';
+            if(selected_surat_tugas.users.length){
+              $.each(selected_surat_tugas.users, function(k,v){
+                sshtml+='<tr>';
+                sshtml+=  '<td>'+v.name+'</td>';
+                sshtml+=  '<td>'+v.pivot.position+'</td>';    
+                sshtml+='</tr>';
+              });
+            }
+            sshtml+=  '</tbody>';
+            sshtml+='</table>';
+        $('#card-body-selected-surat-tugas').html(sshtml);
+
+      }).on('select2:unselecting', function(){
+        $('#card-body-selected-surat-tugas').html('');
       });
+
 
     });
   </script>
