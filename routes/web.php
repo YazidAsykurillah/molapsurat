@@ -39,6 +39,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('surat-tugas', 'SuratTugasController');
 
 	//Laporan Surat Tugas
+	Route::post('laporan-surat-tugas/delete', 'LaporanSuratTugasController@delete');
+	Route::post('laporan-surat-tugas/{id}/complete', 'LaporanSuratTugasController@complete');
+	Route::post('laporan-surat-tugas/{id}/approve-by-tu-ses', 'LaporanSuratTugasController@approveByTUSes');
+	Route::post('laporan-surat-tugas/{id}/approve-by-inspektur', 'LaporanSuratTugasController@approveByInspektur');
+	Route::post('laporan-surat-tugas/{id}/approve-by-kasubag-tu', 'LaporanSuratTugasController@approveByKasubagTU');
 	Route::get('laporan-surat-tugas/select2SuratTugas', 'LaporanSuratTugasController@select2SuratTugas');
 	Route::get('laporan-surat-tugas/datatables', 'LaporanSuratTugasController@datatables');
 	Route::resource('laporan-surat-tugas', 'LaporanSuratTugasController');

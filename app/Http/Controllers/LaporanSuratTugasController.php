@@ -39,13 +39,16 @@ class LaporanSuratTugasController extends Controller
             ->addColumn('nomor_surat_tugas', function($data){
                 return $data->surat_tugas->nomor;
             })
+            ->editColumn('status', function($data){
+                return status_laporan_surat_tugas($data->status);
+            })
             ->addColumn('action', function($data){
                 $action = '';
-                $action.= '<a href="'.url('laporan-surat-tugas/'.$data->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
-                $action.=   '<i class="fa fa-edit"></i>';
-                $action.= '</a> &nbsp;';
                 $action.= '<a href="'.url('laporan-surat-tugas/'.$data->id.'').'" class="btn btn-info btn-xs btn-detail" data-id="'.$data->id.'" title="View">';
                 $action.=   '<i class="fa fa-book-open"></i>';
+                $action.= '</a>&nbsp;';
+                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$data->id.'" data-nomor="'.$data->surat_tugas->nomor.'" title="Hapus">';
+                $action.=   '<i class="fa fa-trash"></i>';
                 $action.= '</a>';
                 return $action;
             })
@@ -156,5 +159,61 @@ class LaporanSuratTugasController extends Controller
             $data = SuratTugas::doesnthave('laporan_surat_tugas')->with(['jenis_surat_tugas', 'tujuan_surat_tugas', 'users'])->get();
         }
         return response()->json($data);
+    }
+
+
+    public function approveByKasubagTU(Request $request, $id)
+    {
+        $laporan_surat_tugas = LaporanSuratTugas::findOrFail($id);
+        $laporan_surat_tugas->status = '1';
+        $laporan_surat_tugas->save();
+        return redirect()->back()
+            ->with('successMessage', "Status berhasil dirubah");
+    }
+
+    public function approveByInspektur(Request $request, $id){
+        $laporan_surat_tugas = LaporanSuratTugas::findOrFail($id);
+        $laporan_surat_tugas->status = '2';
+        $laporan_surat_tugas->nomor_routing_slip = $request->nomor_routing_slip;
+        $laporan_surat_tugas->save();
+        return redirect()->back()
+            ->with('successMessage', "Status berhasil dirubah");
+    }
+
+    public function approveByTUSes(Request $request, $id)
+    {
+        $laporan_surat_tugas = LaporanSuratTugas::findOrFail($id);
+        $laporan_surat_tugas->status = '3';
+        $laporan_surat_tugas->save();
+        return redirect()->back()
+            ->with('successMessage', "Status berhasil dirubah");
+    }
+
+    public function complete(Request $request, $id)
+    {
+        $laporan_surat_tugas = LaporanSuratTugas::findOrFail($id);
+        $laporan_surat_tugas->status = '4';
+        $laporan_surat_tugas->save();
+        return redirect()->back()
+            ->with('successMessage', "Status berhasil dirubah");
+    }
+
+    public function delete(Request $request)
+    {
+        $attachment_to_delete = NULL;
+        $laporan_surat_tugas = LaporanSuratTugas::findOrFail($request->id_to_delete);
+        $attachment_to_delete = $laporan_surat_tugas->attachment != NULL ? $attachment_to_delete ='files/laporan-surat-tugas/'.$laporan_surat_tugas->attachment : $attachment_to_delete = NULL;
+        if($laporan_surat_tugas->delete()){
+            if($attachment_to_delete != NULL){
+                if(file_exists($attachment_to_delete)){
+                    unlink($attachment_to_delete);
+                }
+                
+            }
+            
+            return redirect('laporan-surat-tugas')
+                ->with('successMessage', "Laporan Surat tugas dihapus");
+        }
+
     }
 }

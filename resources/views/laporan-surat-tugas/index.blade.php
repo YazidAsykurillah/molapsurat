@@ -38,10 +38,11 @@
                 <tr>
                   <th style="width: 7%; text-align: center;">#</th>
                   <th>Surat Tugas</th>
-                  <th>Tanggal Approve Ketua Tim</th>
-                  <th>Tanggal Approve Pengendali Mutu</th>
-                  <th>Tanggal Approve Pengendali Teknis</th>
+                  <th>Tgl Approve Ketua Tim</th>
+                  <th>Tgl Approve Pengendali Mutu</th>
+                  <th>Tgl Approve Pengendali Teknis</th>
                   <th style="width: 5%; text-align: center;">Attachment</th>
+                  <th style="width:10%;">Status</th>
                   <th style="width:10%;text-align: center;">Action</th>
                 </tr>
               </thead>
@@ -85,6 +86,7 @@
 @section('additional_scripts')
   <script type="text/javascript">
     $(document).ready(function(){
+
       var table = $('#table').DataTable({
         processing :true,
         serverSide : true,
@@ -96,13 +98,23 @@
           {data: 'tanggal_approve_pengendali_mutu', name: 'tanggal_approve_pengendali_mutu'},
           {data: 'tanggal_approve_pengendali_teknis', name: 'tanggal_approve_pengendali_teknis'},
           {data: 'attachment', name: 'attachment', searchable:false, orderable:false},
+          {data: 'status', name: 'status', orderable:true},
           {data: 'action', name: 'action', searchable:false, orderable:false},
         ],
         columnDefs: [
-          { className: "text-center", "targets": [ 0, 6 ] }
+          { className: "text-center", "targets": [ 0, 7 ] }
         ]
       });
 
+
+      table.on('click', '.btn-delete', function(e){
+        event.preventDefault();
+        var id = $(this).attr('data-id');
+        var nomor = $(this).attr('data-nomor');
+        $('.confirmation_text').html('Laporan Surat Tugas <strong>'+nomor+'</strong> akan dihapus');
+        $('#form-delete-laporan-surat-tugas').find('#id_to_delete').val(id);
+        $('#modal-delete-laporan-surat-tugas').modal('show');
+      });
       
     });
   </script>
