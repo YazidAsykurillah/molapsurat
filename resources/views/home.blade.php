@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('pageTitle')
+  Dashboard
+@endsection
+
 @section('content-header')
     <div class="row mb-2">
       <div class="col-sm-6">

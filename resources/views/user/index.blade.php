@@ -62,7 +62,9 @@
         ajax : '{!! url('user/datatables') !!}',
         columns :[
           {data: 'rownum', name: 'rownum', searchable:false},
-          {data: 'name', name: 'name'},
+          {data: 'name', name: 'name', render:function(data, type, row, meta){
+            return '<a href="{{ url('user') }}/'+row.id+'">'+data+'</a>';
+          }},
           {data: 'email', name: 'email'},
           {data: 'roles', name: 'roles.name'},
           {data: 'action', name: 'action', searchable:false, orderable:false},

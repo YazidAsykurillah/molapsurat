@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use DataTables;
 
 use App\User;
@@ -94,7 +95,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('user.show')
+            ->with('user', $user);
     }
 
     /**
@@ -105,7 +108,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        return view('user.edit')
+            ->with('roles', $roles)
+            ->with('user', $user);
     }
 
     /**
@@ -115,9 +122,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+        //attach role_user table
+        \DB::table('role_user')->where('user_id', $user->id)->delete();
+        $data_role_user = ['role_id'=>$request->role_id, 'user_id'=>$user->id];
+        \DB::table('role_user')->insert($data_role_user);
+        return redirect('user/'.$user->id)
+            ->with('successMessage', "Pengguna telah diupdate");
     }
 
     /**
