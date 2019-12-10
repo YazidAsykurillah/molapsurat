@@ -26,13 +26,34 @@
         </p>
       </a>
     </li>
-    <li class="nav-item">
-      <a href="{{ url('keuangan') }}" class="nav-link">
+    <li class="nav-item has-treeview {{{ (Request::is('keuangan*') ? 'menu-open' : '') }}}">
+      <a href="#" class="nav-link">
         <i class="nav-icon fas fa-money-check-alt"></i>
         <p>
           Keuangan
+          <i class="right fas fa-angle-left"></i>
         </p>
       </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{ url('keuangan/pagu-tahunan') }}" class="nav-link {{{ (Request::is('keuangan/pagu-tahunan') ? 'active' : '') }}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>PAGU Tahunan</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url('keuangan/pengajuan-keuangan') }}" class="nav-link {{{ (Request::is('keuangan/pengajuan-keuangan') ? 'active' : '') }}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Pengajuan Keuangan</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url('keuangan/realisasi-keuangan') }}" class="nav-link {{{ (Request::is('keuangan/realisasi-keuangan') ? 'active' : '') }}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Realisasi Keuangan</p>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="nav-item">
       <a href="{{ url('user') }}" class="nav-link {{{ (Request::is('user') ? 'active' : '') }}}">

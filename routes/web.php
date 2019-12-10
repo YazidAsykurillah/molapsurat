@@ -63,4 +63,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('permission', 'PermissionController');
 
 
+	//Keuangan
+	Route::get('keuangan/pagu-tahunan', 'PaguTahunanController@index');
+
+	//Pagu Tahunan
+	Route::get('pagu-tahunan/datatables', 'PaguTahunanController@datatables');
+	Route::resource('pagu-tahunan', 'PaguTahunanController');
+
+
 });

@@ -27,7 +27,7 @@
         <div class="info-box-content">
           <span class="info-box-text">Surat Tugas</span>
           <span class="info-box-number">
-            10
+            {{ $surat_tugas_count }}
           </span>
         </div>
       </div>
@@ -38,7 +38,7 @@
         <div class="info-box-content">
           <span class="info-box-text">Laporan Surat Tugas</span>
           <span class="info-box-number">
-            10
+            {{ $laporan_surat_tugas_count }}
           </span>
         </div>
       </div>

@@ -153,6 +153,8 @@
 <!-- DataTables -->
 <script src="{{ url('plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ url('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
+<!--AutoNumeric-->
+<script src="{{ url('plugins/autoNumeric.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url('dist/js/adminlte.js') }}"></script>
 
