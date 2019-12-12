@@ -17,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\DetachSuratTugasUser',
             'App\Listeners\RemoveLaporanSuratTugas',
         ],
+        'App\Events\PengajuanKeuanganIsCreated' => [
+            'App\Listeners\SynchronizePaguTahunanBalanceFromCreatePengajuanKeuangan',
+        ],
     ];
 
     /**

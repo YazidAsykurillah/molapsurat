@@ -35,7 +35,7 @@
           <p class="">Nomor Surat Tugas
             <b class="d-block">{{ $surat_tugas->nomor }}</b>
           </p>
-          <p class="">Jenis Surat
+          <p class="">Jenis Kegiatan
             <b class="d-block">{{ $surat_tugas->jenis_surat_tugas->judul }}</b>
           </p>
           <p class="">Tujuan Surat
@@ -66,7 +66,7 @@
     <div class="col-md-5">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Team</h3>
+          <h3 class="card-title">Susunan Tim</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="fas fa-minus"></i>

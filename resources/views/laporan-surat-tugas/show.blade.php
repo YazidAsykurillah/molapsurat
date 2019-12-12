@@ -97,7 +97,7 @@
           <p class="">Nomor Surat Tugas
             <b class="d-block">{{ $surat_tugas->nomor }}</b>
           </p>
-          <p class="">Jenis Surat
+          <p class="">Jenis Kegiatan
             <b class="d-block">{{ $surat_tugas->jenis_surat_tugas->judul }}</b>
           </p>
           <p class="">Tujuan Surat

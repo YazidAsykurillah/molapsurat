@@ -11,4 +11,9 @@ class PaguTahunan extends Model
     protected $fillable = [
     	'tahun', 'jumlah_anggaran'
     ];
+
+    public function pengajuan_keuangan()
+    {
+    	return $this->hasMany('App\PengajuanKeuangan');
+    }
 }

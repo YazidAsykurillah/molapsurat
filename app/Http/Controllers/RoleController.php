@@ -31,7 +31,7 @@ class RoleController extends Controller
 
         return DataTables::eloquent($roles)
             ->addColumn('rownum', function($roles){
-                return '#';
+                return $roles->rownum;
             })
             ->addColumn('action', function($roles){
                 $action = '';

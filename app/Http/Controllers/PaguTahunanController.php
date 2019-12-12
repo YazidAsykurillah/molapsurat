@@ -31,13 +31,16 @@ class PaguTahunanController extends Controller
 
         return DataTables::eloquent($pagu_tahunan)
             ->addColumn('rownum', function($pagu_tahunan){
-                return '#';
+                return $pagu_tahunan->rownum;
             })
             ->addColumn('kasubag', function($pagu_tahunan){
                 return 'Keuangan';
             })
             ->editColumn('jumlah_anggaran', function($pagu_tahunan){
                 return number_format($pagu_tahunan->jumlah_anggaran, 2);
+            })
+            ->editColumn('balance', function($pagu_tahunan){
+                return number_format($pagu_tahunan->balance, 2);
             })
             ->addColumn('action', function($pagu_tahunan){
                 $action = '';
@@ -75,8 +78,9 @@ class PaguTahunanController extends Controller
         $pagu_tahunan = new PaguTahunan;
         $pagu_tahunan->tahun = $request->tahun;
         $pagu_tahunan->jumlah_anggaran = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
+        $pagu_tahunan->balance = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
         $pagu_tahunan->save();
-        return redirect('keuangan/pagu-tahunan')
+        return redirect('pagu-tahunan')
             ->with('successMessage', "Berhasil menginput pagu tahunan");
     }
 

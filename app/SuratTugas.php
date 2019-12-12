@@ -28,6 +28,11 @@ class SuratTugas extends Model
     {
         return $this->hasOne('App\LaporanSuratTugas');
     }
+
+    public function pengajuan_keuangan()
+    {
+        return $this->hasOne('App\PengajuanKeuangan');
+    }
     
     public function users(){
         return $this->belongsToMany('App\User', 'surat_tugas_user')->withPivot('position');

@@ -13,7 +13,7 @@
       <ol class="breadcrumb float-md-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="#">Keuangan</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('keuangan/pagu-tahunan') }}">Pagu Tahunan</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('pagu-tahunan') }}">Pagu Tahunan</a></li>
         <li class="breadcrumb-item active">Create</li>
       </ol>
     </div>

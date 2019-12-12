@@ -35,7 +35,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 	//Surat Tugas
 	Route::post('surat-tugas/delete', 'SuratTugasController@delete');
+	Route::get('surat-tugas/monitoring-datatables', 'SuratTugasController@MonitoringDatatables');
 	Route::get('surat-tugas/datatables', 'SuratTugasController@datatables');
+	Route::get('surat-tugas/monitoring', 'SuratTugasController@monitoring');
 	Route::resource('surat-tugas', 'SuratTugasController');
 
 	//Laporan Surat Tugas
@@ -62,13 +64,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('permission/datatables', 'PermissionController@datatables');
 	Route::resource('permission', 'PermissionController');
 
-
-	//Keuangan
-	Route::get('keuangan/pagu-tahunan', 'PaguTahunanController@index');
-
 	//Pagu Tahunan
 	Route::get('pagu-tahunan/datatables', 'PaguTahunanController@datatables');
 	Route::resource('pagu-tahunan', 'PaguTahunanController');
 
-
+	//Pengajuan Keuangan
+	Route::get('pengajuan-keuangan/select2SuratTugas', 'PengajuanKeuanganController@select2SuratTugas');
+	Route::get('pengajuan-keuangan/datatables', 'PengajuanKeuanganController@datatables');
+	Route::resource('pengajuan-keuangan', 'PengajuanKeuanganController');
 });

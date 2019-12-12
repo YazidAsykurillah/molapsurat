@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('pageTitle')
-  Jenis Surat Tugas
+  Jenis Kegiatan
 @endsection
 
 @section('content-header')
   <div class="row mb-2">
     <div class="col-md-6">
-      <h1 class="m-0 text-dark">Jenis Surat Tugas</h1>
+      <h1 class="m-0 text-dark">Jenis Kegiatan</h1>
     </div>
     <div class="col-md-6">
       <ol class="breadcrumb float-md-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('jenis-surat-tugas') }}">Jenis Surat Tugas</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('jenis-surat-tugas') }}">Jenis Kegiatan</a></li>
         <li class="breadcrumb-item active">Create</li>
       </ol>
     </div>
@@ -24,7 +24,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Form Input Jenis Surat Tugas</h3>
+          <h3 class="card-title">Form Input Jenis Kegiatan</h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">

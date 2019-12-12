@@ -34,7 +34,7 @@ class UserController extends Controller
 
         return DataTables::eloquent($user)
             ->addColumn('rownum', function($user){
-                return '#';
+                return $user->rownum;
             })
             ->addColumn('roles', function (User $user) {
                 return $user->roles->map(function($role) {

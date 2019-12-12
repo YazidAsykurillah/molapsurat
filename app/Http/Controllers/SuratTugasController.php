@@ -34,7 +34,7 @@ class SuratTugasController extends Controller
 
         return DataTables::eloquent($surat_tugas)
             ->addColumn('rownum', function($surat_tugas){
-                return '#';
+                return $surat_tugas->rownum;
             })
             ->addColumn('judul_jenis_surat_tugas', function($surat_tugas){
                 return $surat_tugas->jenis_surat_tugas->judul;
@@ -183,5 +183,55 @@ class SuratTugasController extends Controller
                 ->with('successMessage', "Surat tugas dihapus");
         }
 
+    }
+
+    public function monitoring()
+    {
+        return view('surat-tugas.monitoring');
+    }
+
+    public function MonitoringDatatables(Request $request)
+    {
+        \DB::statement(\DB::raw('set @rownum=0'));
+        $surat_tugas = SuratTugas::with(['jenis_surat_tugas', 'tujuan_surat_tugas', 'laporan_surat_tugas'])->select([
+            \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
+            'surat_tugas.*'
+        ]);
+
+        return DataTables::eloquent($surat_tugas)
+            ->addColumn('rownum', function($surat_tugas){
+                return $surat_tugas->rownum;
+            })
+            ->addColumn('judul_jenis_surat_tugas', function($surat_tugas){
+                return $surat_tugas->jenis_surat_tugas->judul;
+            })
+            ->addColumn('nama_tujuan_surat_tugas', function($surat_tugas){
+                return $surat_tugas->tujuan_surat_tugas->nama;
+            })
+            ->editColumn('uraian', function($surat_tugas){
+                return str_limit($surat_tugas->uraian, 20);
+            })
+            ->addColumn('laporan_surat_tugas_id', function($surat_tugas){
+                $display = '';
+                if($surat_tugas->laporan_surat_tugas){
+                    $display = 'exists';
+                }else{
+                    $display='-';
+                }
+                return $display;
+            })
+            ->addColumn('status_laporan_surat_tugas', function($surat_tugas){
+                $display = '-';
+                if($surat_tugas->laporan_surat_tugas){
+                    $display = status_laporan_surat_tugas($surat_tugas->laporan_surat_tugas->status);
+                }
+                return $display;
+            })
+            ->addColumn('color', function($surat_tugas){
+                $color = '';
+                $color = 'red';
+                return $color;
+            })
+            ->make(true);
     }
 }

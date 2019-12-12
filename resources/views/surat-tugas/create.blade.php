@@ -58,7 +58,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="jenis_surat_tugas_id" class="col-sm-2 col-form-label">{{ __('Jenis Surat Tugas') }}</label>
+              <label for="jenis_surat_tugas_id" class="col-sm-2 col-form-label">{{ __('Jenis Kegiatan') }}</label>
               <div class="col-md-4">
                 <select name="jenis_surat_tugas_id" id="jenis_surat_tugas_id" class="form-control"></select>
                 @if ($errors->has('jenis_surat_tugas_id'))
@@ -106,7 +106,7 @@
             </div>
 
             <div class="form-group row">
-              <label for="team" class="col-sm-2 col-form-label">{{ __('Team') }}</label>
+              <label for="team" class="col-sm-2 col-form-label">{{ __('Susunan Tim') }}</label>
               <div class="col-md-8">
                <table class="table" id="table-team">
                  <thead>

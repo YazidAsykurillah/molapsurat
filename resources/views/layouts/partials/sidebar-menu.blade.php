@@ -26,6 +26,14 @@
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="{{ url('surat-tugas/monitoring') }}" class="nav-link {{{ (Request::is('surat-tugas/monitoring') ? 'active' : '') }}}">
+        <i class="nav-icon fas fa-laptop"></i>
+        <p>
+          Monitoring
+        </p>
+      </a>
+    </li>
     <li class="nav-item has-treeview {{{ (Request::is('keuangan*') ? 'menu-open' : '') }}}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-money-check-alt"></i>
@@ -36,19 +44,19 @@
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="{{ url('keuangan/pagu-tahunan') }}" class="nav-link {{{ (Request::is('keuangan/pagu-tahunan') ? 'active' : '') }}}">
+          <a href="{{ url('pagu-tahunan') }}" class="nav-link {{{ (Request::is('pagu-tahunan') ? 'active' : '') }}}">
             <i class="far fa-circle nav-icon"></i>
             <p>PAGU Tahunan</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ url('keuangan/pengajuan-keuangan') }}" class="nav-link {{{ (Request::is('keuangan/pengajuan-keuangan') ? 'active' : '') }}}">
+          <a href="{{ url('pengajuan-keuangan') }}" class="nav-link {{{ (Request::is('pengajuan-keuangan') ? 'active' : '') }}}">
             <i class="far fa-circle nav-icon"></i>
             <p>Pengajuan Keuangan</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ url('keuangan/realisasi-keuangan') }}" class="nav-link {{{ (Request::is('keuangan/realisasi-keuangan') ? 'active' : '') }}}">
+          <a href="{{ url('realisasi-keuangan') }}" class="nav-link {{{ (Request::is('realisasi-keuangan') ? 'active' : '') }}}">
             <i class="far fa-circle nav-icon"></i>
             <p>Realisasi Keuangan</p>
           </a>
@@ -75,7 +83,7 @@
         <li class="nav-item">
           <a href="{{ url('jenis-surat-tugas') }}" class="nav-link {{{ (Request::is('jenis-surat-tugas') ? 'active' : '') }}}">
             <i class="far fa-circle nav-icon"></i>
-            <p>Jenis Surat Tugas</p>
+            <p>Jenis Kegiatan</p>
           </a>
         </li>
         <li class="nav-item">

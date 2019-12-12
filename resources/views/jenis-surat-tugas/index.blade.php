@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('pageTitle')
-  Jenis Surat Tugas
+  Jenis Kegiatan
 @endsection
 
 @section('content-header')
   <div class="row mb-2">
     <div class="col-md-6">
-      <h1 class="m-0 text-dark">Jenis Surat Tugas</h1>
+      <h1 class="m-0 text-dark">Jenis Kegiatan</h1>
     </div>
     <div class="col-md-6">
       <ol class="breadcrumb float-md-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('jenis-surat-tugas') }}">Jenis Surat Tugas</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('jenis-surat-tugas') }}">Jenis Kegiatan</a></li>
         <li class="breadcrumb-item active">Index</li>
       </ol>
     </div>
@@ -24,9 +24,9 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Jenis Surat Tugas</h3>
+          <h3 class="card-title">Jenis Kegiatan</h3>
           <div class="card-tools">
-            <a class="btn btn-info btn-xs" href="{{ url('jenis-surat-tugas/create') }}" data-toggle="tooltip" title="Buat jenis surat tugas baru">
+            <a class="btn btn-info btn-xs" href="{{ url('jenis-surat-tugas/create') }}" data-toggle="tooltip" title="Buat jenis Kegiatan baru">
               <i class="fa fa-plus-circle"></i> Tambah
             </a>
           </div>
@@ -103,7 +103,7 @@
         event.preventDefault();
         var id = $(this).attr('data-id');
         var judul = $(this).attr('data-judul');
-        $('.confirmation_text').html('Jenis Surat Tugas <strong>'+judul+'</strong> akan dihapus');
+        $('.confirmation_text').html('Jenis Kegiatan <strong>'+judul+'</strong> akan dihapus');
         $('#form-delete-jenis-surat-tugas').find('#id_to_delete').val(id);
         $('#modal-delete-jenis-surat-tugas').modal('show');
       });

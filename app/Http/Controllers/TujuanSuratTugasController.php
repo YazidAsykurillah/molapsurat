@@ -30,7 +30,7 @@ class TujuanSuratTugasController extends Controller
 
         return DataTables::eloquent($tujuan_surat_tugas)
             ->addColumn('rownum', function($tujuan_surat_tugas){
-                return '#';
+                return $tujuan_surat_tugas->rownum;
             })
             ->addColumn('action', function($tujuan_surat_tugas){
                 $action = '';

@@ -34,7 +34,7 @@ class LaporanSuratTugasController extends Controller
 
         return DataTables::eloquent($data)
             ->addColumn('rownum', function($data){
-                return '#';
+                return $data->rownum;
             })
             ->addColumn('nomor_surat_tugas', function($data){
                 return $data->surat_tugas->nomor;
