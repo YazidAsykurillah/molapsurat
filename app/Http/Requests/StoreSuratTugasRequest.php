@@ -29,7 +29,7 @@ class StoreSuratTugasRequest extends FormRequest
             'jenis_surat_tugas_id'=>'required',
             'tujuan_surat_tugas_id'=>'required',
             'uraian'=>'required',
-            'attachment'=>'required|file|mimes:jpg,jpeg,png,JPG,JPEG,PNG,pdf,PDF',
+            'attachment'=>'required|file|mimes:pdf,PDF',
         ];
     }
 }

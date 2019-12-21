@@ -44,6 +44,9 @@ class PaguTahunanController extends Controller
             })
             ->addColumn('action', function($pagu_tahunan){
                 $action = '';
+                $action.= '<a href="'.url('pagu-tahunan/'.$pagu_tahunan->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
+                $action.=   '<i class="fa fa-edit"></i>';
+                $action.= '</a> &nbsp;';
                 $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$pagu_tahunan->id.'" data-text="'.$pagu_tahunan->year.'" title="Hapus">';
                 $action.=   '<i class="fa fa-trash"></i>';
                 $action.= '</a>';
@@ -103,7 +106,14 @@ class PaguTahunanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pagu_tahunan = PaguTahunan::findOrFail($id);
+        $year_options = [];
+        for ($i=2018; $i <= 2025; $i++) { 
+            $year_options[] = $i;
+        }
+        return view('pagu-tahunan.edit')
+            ->with('year_options', $year_options)
+            ->with('pagu_tahunan', $pagu_tahunan);
     }
 
     /**
@@ -115,7 +125,12 @@ class PaguTahunanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $pagu_tahunan = PaguTahunan::findOrFail($id);
+        $pagu_tahunan->tahun = $request->tahun;
+        $pagu_tahunan->jumlah_anggaran = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
+        $pagu_tahunan->save();
+        return redirect('pagu-tahunan')
+            ->with('successMessage', "Berhasil menginput pagu tahunan");
     }
 
     /**

@@ -138,7 +138,13 @@ class SuratTugasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $surat_tugas = SuratTugas::findOrFail($id);
+        $position_options = config('surat_tugas.position_options');
+        /*$surat_tugas_users = $surat_tugas->users;
+        return $surat_tugas_users;*/
+        return view('surat-tugas.edit')
+            ->with('position_options', $position_options)
+            ->with('surat_tugas', $surat_tugas);
     }
 
     /**
@@ -150,7 +156,30 @@ class SuratTugasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $surat_tugas = SuratTugas::findOrFail($id);
+        $surat_tugas->nomor = $request->nomor;
+        $surat_tugas->tanggal = $request->tanggal;
+        $surat_tugas->jenis_surat_tugas_id = $request->jenis_surat_tugas_id;
+        $surat_tugas->tujuan_surat_tugas_id = $request->tujuan_surat_tugas_id;
+        $surat_tugas->tanggal_mulai = $request->tanggal_mulai;
+        $surat_tugas->tanggal_selesai = $request->tanggal_selesai;
+        $surat_tugas->uraian = $request->uraian;
+        $surat_tugas->save();
+
+        //store to surat_tugas_user table
+        $data_team = [];
+        foreach($request->user_id as $key=>$val){
+            $data_team[] = [
+                'surat_tugas_id'=>$surat_tugas->id,
+                'user_id'=>$request->user_id[$key],
+                'position'=>$request->position[$key],
+            ];
+        }
+        \DB::table('surat_tugas_user')->where('surat_tugas_id','=', $id)->delete();
+        \DB::table('surat_tugas_user')->insert($data_team);
+
+        return redirect('surat-tugas/'.$surat_tugas->id)
+            ->with('successMessage', "Berhasil update surat tugas");
     }
 
     /**
