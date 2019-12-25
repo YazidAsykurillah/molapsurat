@@ -15,7 +15,11 @@ class CreatePengajuanKeuanganTable extends Migration
     {
         Schema::create('pengajuan_keuangan', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('surat_tugas_id');
+            $table->integer('jenis_surat_tugas_id');
+            $table->string('nama_kegiatan');
+            $table->date('tanggal_mulai_kegiatan');
+            $table->date('tanggal_selesai_kegiatan');
+            $table->integer('pic_id')->comment('Penanggung Jawab Diambil dari table user.id');
             $table->decimal('jumlah_pengajuan', 20, 2);
             $table->integer('pagu_tahunan_id')->comment('Pagu tahunan diambil berdasarkan tanggal mulai surat tugas terpilih');
             $table->timestamps();

@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePengajuanKeuanganRequest;
+use App\Http\Requests\UpdatePengajuanKeuanganRequest;
 
 use DataTables;
 use Carbon\Carbon;
 
 use App\PengajuanKeuangan;
-use App\SuratTugas;
+use App\JenisSuratTugas;
 use App\PaguTahunan;
 
 use Event;
 use App\Events\PengajuanKeuanganIsCreated;
+use App\Events\PengajuanKeuanganIsUpdated;
 
 
 class PengajuanKeuanganController extends Controller
@@ -31,7 +33,7 @@ class PengajuanKeuanganController extends Controller
     public function datatables(Request $request)
     {
         \DB::statement(\DB::raw('set @rownum=0'));
-        $data = PengajuanKeuangan::select([
+        $data = PengajuanKeuangan::with(['jenis_surat_tugas', 'pic'])->select([
             \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
             'pengajuan_keuangan.*'
         ]);
@@ -40,17 +42,24 @@ class PengajuanKeuanganController extends Controller
             ->addColumn('rownum', function($data){
                 return $data->rownum;
             })
-            ->addColumn('nomor_surat_tugas', function($data){
-                return $data->surat_tugas->nomor;
+            ->addColumn('judul_jenis_surat_tugas', function($data){
+                return $data->jenis_surat_tugas->judul;
+            })
+            ->addColumn('nama_penanggung_jawab', function($data){
+                return $data->pic->name;
             })
             ->editColumn('jumlah_pengajuan', function($data){
                 return number_format($data->jumlah_pengajuan, 2);
             })
             ->addColumn('action', function($data){
                 $action = '';
-                $action.= '<a href="#" class="btn btn-danger btn-xs btn-delete" data-id="'.$data->id.'" data-text="'.$data->surat_tugas->nomor.'" title="Hapus">';
-                $action.=   '<i class="fa fa-trash"></i>';
-                $action.= '</a>';
+
+                $action.= '<a href="'.url('pengajuan-keuangan/'.$data->id.'').'" class="btn btn-primary btn-xs" title="Show">';
+                $action.=   '<i class="fa fa-eye"></i>';
+                $action.= '</a> &nbsp;';
+                $action.= '<a href="'.url('pengajuan-keuangan/'.$data->id.'/edit').'" class="btn btn-secondary btn-xs" title="Edit">';
+                $action.=   '<i class="fa fa-edit"></i>';
+                $action.= '</a> &nbsp;';
                 return $action;
             })
             ->make(true);
@@ -73,11 +82,9 @@ class PengajuanKeuanganController extends Controller
      */
     public function store(StorePengajuanKeuanganRequest $request)
     {
-        $surat_tugas = SuratTugas::findOrFail($request->surat_tugas_id);
-        //tahun surat tugas 
-        $year_of_surat_tugas = Carbon::parse($surat_tugas->tanggal_mulai)->year;
-        //get pagu tahunan;
-        $pagu_tahunan = PaguTahunan::where('tahun', '=', $year_of_surat_tugas)->get()->first();
+        $now = Carbon::now();
+        $current_year = $now->format('Y');
+        $pagu_tahunan = PaguTahunan::where('tahun', '=', $current_year)->get()->first();
         if(!$pagu_tahunan){
             return redirect()
                 ->back()
@@ -85,7 +92,11 @@ class PengajuanKeuanganController extends Controller
         }
 
         $pengajuan_keuangan = new PengajuanKeuangan;
-        $pengajuan_keuangan->surat_tugas_id = $request->surat_tugas_id;
+        $pengajuan_keuangan->jenis_surat_tugas_id = $request->jenis_surat_tugas_id;
+        $pengajuan_keuangan->nama_kegiatan = $request->nama_kegiatan;
+        $pengajuan_keuangan->tanggal_mulai_kegiatan = $request->tanggal_mulai_kegiatan;
+        $pengajuan_keuangan->tanggal_selesai_kegiatan = $request->tanggal_selesai_kegiatan;
+        $pengajuan_keuangan->pic_id = $request->pic_id;
         $pengajuan_keuangan->jumlah_pengajuan = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_pengajuan));
         $pengajuan_keuangan->pagu_tahunan_id = $pagu_tahunan->id;
         $pengajuan_keuangan->save();
@@ -105,7 +116,9 @@ class PengajuanKeuanganController extends Controller
      */
     public function show($id)
     {
-        //
+        $pengajuan_keuangan = PengajuanKeuangan::findOrFail($id);
+        return view('pengajuan-keuangan.show')
+            ->with('pengajuan_keuangan', $pengajuan_keuangan);
     }
 
     /**
@@ -116,7 +129,9 @@ class PengajuanKeuanganController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pengajuan_keuangan = PengajuanKeuangan::findOrFail($id);
+        return view('pengajuan-keuangan.edit')
+            ->with('pengajuan_keuangan', $pengajuan_keuangan);
     }
 
     /**
@@ -126,9 +141,32 @@ class PengajuanKeuanganController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePengajuanKeuanganRequest $request, $id)
     {
-        //
+        $now = Carbon::now();
+        $current_year = $now->format('Y');
+        $pagu_tahunan = PaguTahunan::where('tahun', '=', $current_year)->get()->first();
+        if(!$pagu_tahunan){
+            return redirect()
+                ->back()
+                ->with('errorMessage', "Belum ada pagu tahunan untuk tahun $year_of_surat_tugas");
+        }
+
+        $pengajuan_keuangan = PengajuanKeuangan::findOrFail($id);
+        $pengajuan_keuangan->jenis_surat_tugas_id = $request->jenis_surat_tugas_id;
+        $pengajuan_keuangan->nama_kegiatan = $request->nama_kegiatan;
+        $pengajuan_keuangan->tanggal_mulai_kegiatan = $request->tanggal_mulai_kegiatan;
+        $pengajuan_keuangan->tanggal_selesai_kegiatan = $request->tanggal_selesai_kegiatan;
+        $pengajuan_keuangan->pic_id = $request->pic_id;
+        $pengajuan_keuangan->jumlah_pengajuan = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_pengajuan));
+        $pengajuan_keuangan->pagu_tahunan_id = $pagu_tahunan->id;
+        $pengajuan_keuangan->save();
+
+        //Fire event PengajuanKeuanganIsUpdated
+        Event::fire(new PengajuanKeuanganIsUpdated($pengajuan_keuangan));
+
+        return redirect('pengajuan-keuangan')
+            ->with('successMessage', "Berhasil update pengajuan keuangan");
     }
 
     /**
@@ -142,16 +180,16 @@ class PengajuanKeuanganController extends Controller
         //
     }
 
-    public function select2SuratTugas(Request $request)
+    public function select2JenisSuratTugas(Request $request)
     {
         $data = [];
         if($request->has('q')){
             $search = $request->q;
-            $data = SuratTugas::doesnthave('pengajuan_keuangan')->where('nomor', 'LIKE', "%$search%")
+            $data = JenisSuratTugas::where('judul', 'LIKE', "%$search%")
                     ->get();
         }
         else{
-            $data = SuratTugas::doesnthave('pengajuan_keuangan')->with(['jenis_surat_tugas', 'tujuan_surat_tugas', 'users'])->get();
+            $data = JenisSuratTugas::get();
         }
         return response()->json($data);
     }

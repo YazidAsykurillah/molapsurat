@@ -69,7 +69,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('pagu-tahunan', 'PaguTahunanController');
 
 	//Pengajuan Keuangan
-	Route::get('pengajuan-keuangan/select2SuratTugas', 'PengajuanKeuanganController@select2SuratTugas');
+	Route::get('pengajuan-keuangan/select2JenisSuratTugas', 'PengajuanKeuanganController@select2JenisSuratTugas');
 	Route::get('pengajuan-keuangan/datatables', 'PengajuanKeuanganController@datatables');
 	Route::resource('pengajuan-keuangan', 'PengajuanKeuanganController');
+
+	//Realisasi Keuangan
+	Route::get('realisasi-keuangan/datatables', 'RealisasiKeuanganController@datatables');
+	Route::post('realisasi-keuangan/store', 'RealisasiKeuanganController@store');
+	Route::resource('realisasi-keuangan', 'RealisasiKeuanganController');
+
 });

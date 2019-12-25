@@ -1,20 +1,23 @@
 @extends('layouts.app')
 
 @section('pageTitle')
-  Input Pengajuan Keuangan
+  Edit Pengajuan Keuangan
 @endsection
 
 @section('content-header')
   <div class="row mb-2">
     <div class="col-md-6">
-      <h1 class="m-0 text-dark">Input Pengajuan Keuangan</h1>
+      <h1 class="m-0 text-dark">Edit Pengajuan Keuangan</h1>
     </div>
     <div class="col-md-6">
       <ol class="breadcrumb float-md-right">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="#">Keuangan</a></li>
         <li class="breadcrumb-item"><a href="{{ url('pengajuan-keuangan') }}">Pengajuan Keuangan</a></li>
-        <li class="breadcrumb-item active">Create</li>
+        <li class="breadcrumb-item">
+          <a href="{{ url('pengajuan-keuangan/'.$pengajuan_keuangan->id.'') }}">{{ $pengajuan_keuangan->id}}</a>
+        </li>
+        <li class="breadcrumb-item active">Edit</li>
       </ol>
     </div>
   </div>
@@ -25,16 +28,19 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Form Input Pengajuan Keuangan</h3>
+          <h3 class="card-title">Form Edit Pengajuan Keuangan</h3>
           <div class="card-tools"></div>
         </div>
         <div class="card-body">
-          <form method="POST" id="form-create" action="{{ url('pengajuan-keuangan') }}" class="form form-horizontal" enctype="multipart/form-data">
+          <form id="form-edit" action="{{ url('pengajuan-keuangan', [$pengajuan_keuangan->id]) }}" class="form form-horizontal" method="POST">
+            <input type="hidden" name="_method" value="PUT">
             @csrf
             <div class="form-group row">
               <label for="jenis_surat_tugas_id" class="col-sm-2 col-form-label">{{ __('Jenis Kegiatan') }}</label>
               <div class="col-md-4">
-                <select class="form-control" name="jenis_surat_tugas_id" id="jenis_surat_tugas_id"></select>
+                <select class="form-control" name="jenis_surat_tugas_id" id="jenis_surat_tugas_id">
+                  <option value="{{$pengajuan_keuangan->jenis_surat_tugas_id}}">{{ $pengajuan_keuangan->jenis_surat_tugas->judul }}</option>
+                </select>
                 @if ($errors->has('jenis_surat_tugas_id'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('jenis_surat_tugas_id') }}</strong>
@@ -45,7 +51,7 @@
             <div class="form-group row">
               <label for="nama_kegiatan" class="col-sm-2 col-form-label">{{ __('Nama Kegiatan') }}</label>
               <div class="col-md-4">
-                <input id="nama_kegiatan" type="text" class="form-control{{ $errors->has('nama_kegiatan') ? ' is-invalid' : '' }}" name="nama_kegiatan" value="{{ old('nama_kegiatan') }}">
+                <input id="nama_kegiatan" type="text" class="form-control{{ $errors->has('nama_kegiatan') ? ' is-invalid' : '' }}" name="nama_kegiatan" value="{{ old('nama_kegiatan') ? old('nama_kegiatan') : $pengajuan_keuangan->nama_kegiatan }}">
                 @if ($errors->has('nama_kegiatan'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('nama_kegiatan') }}</strong>
@@ -56,7 +62,7 @@
             <div class="form-group row">
               <label for="tanggal_mulai_kegiatan" class="col-sm-2 col-form-label">{{ __('Tanggal Mulai Kegiatan') }}</label>
               <div class="col-md-4">
-                <input id="tanggal_mulai_kegiatan" type="text" class="form-control{{ $errors->has('tanggal_mulai_kegiatan') ? ' is-invalid' : '' }}" name="tanggal_mulai_kegiatan" value="{{ old('tanggal_mulai_kegiatan') }}">
+                <input id="tanggal_mulai_kegiatan" type="text" class="form-control{{ $errors->has('tanggal_mulai_kegiatan') ? ' is-invalid' : '' }}" name="tanggal_mulai_kegiatan" value="{{ old('tanggal_mulai_kegiatan') ? old('tanggal_mulai_kegiatan') : $pengajuan_keuangan->tanggal_mulai_kegiatan }}">
                 @if ($errors->has('tanggal_mulai_kegiatan'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('tanggal_mulai_kegiatan') }}</strong>
@@ -67,7 +73,7 @@
             <div class="form-group row">
               <label for="tanggal_selesai_kegiatan" class="col-sm-2 col-form-label">{{ __('Tanggal Selesai Kegiatan') }}</label>
               <div class="col-md-4">
-                <input id="tanggal_selesai_kegiatan" type="text" class="form-control{{ $errors->has('tanggal_selesai_kegiatan') ? ' is-invalid' : '' }}" name="tanggal_selesai_kegiatan" value="{{ old('tanggal_selesai_kegiatan') }}">
+                <input id="tanggal_selesai_kegiatan" type="text" class="form-control{{ $errors->has('tanggal_selesai_kegiatan') ? ' is-invalid' : '' }}" name="tanggal_selesai_kegiatan" value="{{ old('tanggal_selesai_kegiatan') ? old('tanggal_selesai_kegiatan') : $pengajuan_keuangan->tanggal_selesai_kegiatan }}">
                 @if ($errors->has('tanggal_selesai_kegiatan'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('tanggal_selesai_kegiatan') }}</strong>
@@ -78,7 +84,9 @@
             <div class="form-group row">
               <label for="pic_id" class="col-sm-2 col-form-label">{{ __('Penanggung Jawab') }}</label>
               <div class="col-md-4">
-                <select class="form-control" name="pic_id" id="pic_id"></select>
+                <select class="form-control" name="pic_id" id="pic_id">
+                  <option value="{{ $pengajuan_keuangan->pic_id }}">{{ $pengajuan_keuangan->pic->name }}</option>
+                </select>
                 @if ($errors->has('pic_id'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('pic_id') }}</strong>
@@ -89,7 +97,7 @@
             <div class="form-group row">
               <label for="jumlah_pengajuan" class="col-sm-2 col-form-label">{{ __('Jumlah Anggaran') }}</label>
               <div class="col-md-4">
-                <input id="jumlah_pengajuan" type="text" class="form-control{{ $errors->has('jumlah_pengajuan') ? ' is-invalid' : '' }}" name="jumlah_pengajuan" value="{{ old('jumlah_pengajuan') }}">
+                <input id="jumlah_pengajuan" type="text" class="form-control{{ $errors->has('jumlah_pengajuan') ? ' is-invalid' : '' }}" name="jumlah_pengajuan" value="{{ old('jumlah_pengajuan') ? old('jumlah_pengajuan') : $pengajuan_keuangan->jumlah_pengajuan }}">
                 @if ($errors->has('jumlah_pengajuan'))
                   <span class="d-block invalid-feedback" role="alert">
                       <strong>{{ $errors->first('jumlah_pengajuan') }}</strong>
@@ -179,7 +187,7 @@
         aDec:'.'
       });
 
-      $('#form-create').on('submit', function(){
+      $('#form-edit').on('submit', function(){
         $('#btn-submit').prop('disabled', true);
       });
 

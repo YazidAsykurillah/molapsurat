@@ -20,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PengajuanKeuanganIsCreated' => [
             'App\Listeners\SynchronizePaguTahunanBalanceFromCreatePengajuanKeuangan',
         ],
+        'App\Events\PengajuanKeuanganIsUpdated' => [
+            'App\Listeners\SynchronizePaguTahunanBalanceFromUpdatePengajuanKeuangan',
+        ],
     ];
 
     /**
