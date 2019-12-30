@@ -256,11 +256,6 @@ class SuratTugasController extends Controller
                 }
                 return $display;
             })
-            ->addColumn('color', function($surat_tugas){
-                $color = '';
-                $color = 'red';
-                return $color;
-            })
             ->make(true);
     }
 }

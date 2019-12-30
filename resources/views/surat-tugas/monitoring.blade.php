@@ -33,6 +33,7 @@
               <thead>
                 <tr>
                   <th style="width: 7%; text-align: center;">#</th>
+                  <th style="width: 10%;"></th>
                   <th>Nomor</th>
                   <th>Jenis Kegiatan</th>
                   <th>Tujuan</th>
@@ -89,6 +90,10 @@
         ajax : '{!! url('surat-tugas/monitoring-datatables') !!}',
         columns :[
           {data: 'rownum', name: 'rownum', searchable:false},
+          {data: 'background_type', name: 'background_type', searchable:false, orderable:false, render:function(data, type, row, meta){
+            var color = '<div class="'+data+' color-palette" style="width:100%;"><span>&nbsp;&nbsp;</span></div>';
+            return color;
+          }},
           {data: 'nomor', name: 'nomor', render:function(data, type, row, meta){
             return '<a href="{{ url('surat-tugas') }}/'+row.id+'">'+data+'</a>';
           }},
@@ -105,7 +110,6 @@
             }
           }},
           {data:'status_laporan_surat_tugas', name:'status_laporan_surat_tugas'},
-          {data:'color', name:'color', visible:false},
         ],
         columnDefs: [
           { className: "text-center", "targets": [ 0 ] }

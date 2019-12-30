@@ -34,7 +34,7 @@
               <thead>
                 <tr>
                   <th style="width: 7%; text-align: center;">#</th>
-                  <th>Surat Tugas</th>
+                  <th>Jenis Kegiatan</th>
                   <th>Jumlah Pengajuan</th>
                   <th>Jumlah Realisasi</th>
                   <th>Selisih</th>
