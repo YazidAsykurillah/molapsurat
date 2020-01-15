@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use App\SuratTugas;
 
 use Event;
+use Excel;
+
 use App\Events\SuratTugasIsDeleted;
 
 class SuratTugasController extends Controller
@@ -216,7 +218,9 @@ class SuratTugasController extends Controller
 
     public function monitoring()
     {
-        return view('surat-tugas.monitoring');
+        $status_laporan_surat_tugas_opt = [ '1', '2', '3', '4'];
+        return view('surat-tugas.monitoring')
+            ->with('status_laporan_surat_tugas_opt', $status_laporan_surat_tugas_opt);
     }
 
     public function MonitoringDatatables(Request $request)
@@ -227,6 +231,12 @@ class SuratTugasController extends Controller
             'surat_tugas.*'
         ]);
 
+        if($request->get('filter_status_laporan_surat_tugas')){
+            $surat_tugas->whereHas('laporan_surat_tugas', function($query) use($request){
+                return $query->where('status','=', $request->get('filter_status_laporan_surat_tugas'));
+            });
+        }
+        
         return DataTables::eloquent($surat_tugas)
             ->addColumn('rownum', function($surat_tugas){
                 return $surat_tugas->rownum;
@@ -258,4 +268,56 @@ class SuratTugasController extends Controller
             })
             ->make(true);
     }
+
+
+    public function export(Request $request)
+    {
+        /*
+        $data = SuratTugas::get()->toArray();
+        $file_name = 'Export-'.Carbon::now()->format('Y-m-d');
+        return Excel::create($file_name, function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+
+            });
+        })->download('xlsx');
+        */
+        $file_name = 'Export-'.Carbon::now()->format('Y-m-d');
+        \DB::statement(\DB::raw('set @rownum=0'));
+        $data = SuratTugas::with(['jenis_surat_tugas', 'tujuan_surat_tugas', 'laporan_surat_tugas'])->select([
+            \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
+            'surat_tugas.*'
+        ])->get();
+
+        return Excel::create($file_name, function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->cell('A1', function($cell) {$cell->setValue('No');});
+                $sheet->cell('B1', function($cell) {$cell->setValue('Tanggal Pelaksanaan Kegiatan');});
+                $sheet->cell('C1', function($cell) {$cell->setValue('Perihal');});
+                $sheet->cell('D1', function($cell) {$cell->setValue('No & Tanggal Surat Tugas');});
+                $sheet->cell('E1', function($cell) {$cell->setValue('Pelaksana Kegiatan');});
+                $sheet->cell('F1', function($cell) {$cell->setValue('Tempat Kegiatan');});
+                $sheet->cell('G1', function($cell) {$cell->setValue('DIPA');});
+                $sheet->cell('H1', function($cell) {$cell->setValue('Status Laporan');});
+                if (!empty($data)) {
+                    foreach ($data as $key => $value) {
+                        $i= $key+2;
+                        $sheet->cell('A'.$i, $value->rownum); 
+                        $sheet->cell('B'.$i, $value->tanggal_mulai.' s.d '.$value->tanggal_selesai); 
+                        $sheet->cell('C'.$i, $value->uraian); 
+                        $sheet->cell('D'.$i, $value->nomor.' '.$value->tanggal); 
+                        $sheet->cell('E'.$i, $value->pelaksana_kegiatan);
+                        $sheet->cell('F'.$i, $value->tujuan_surat_tugas->nama);
+                        $sheet->cell('G'.$i, "ITJEN");
+                        $sheet->cell('H'.$i, $value->laporan_surat_tugas ? $value->laporan_surat_tugas->status : NULL);
+                    }
+                }
+            });
+        })->download('xlsx');
+
+    }
+
+
 }

@@ -82,6 +82,7 @@ class PaguTahunanController extends Controller
         $pagu_tahunan->tahun = $request->tahun;
         $pagu_tahunan->jumlah_anggaran = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
         $pagu_tahunan->balance = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
+        $pagu_tahunan->target_output = floatval(preg_replace('#[^0-9.]#', '', $request->target_output));
         $pagu_tahunan->save();
         return redirect('pagu-tahunan')
             ->with('successMessage', "Berhasil menginput pagu tahunan");
@@ -128,9 +129,10 @@ class PaguTahunanController extends Controller
         $pagu_tahunan = PaguTahunan::findOrFail($id);
         $pagu_tahunan->tahun = $request->tahun;
         $pagu_tahunan->jumlah_anggaran = floatval(preg_replace('#[^0-9.]#', '', $request->jumlah_anggaran));
+        $pagu_tahunan->target_output = floatval(preg_replace('#[^0-9.]#', '', $request->target_output));
         $pagu_tahunan->save();
         return redirect('pagu-tahunan')
-            ->with('successMessage', "Berhasil menginput pagu tahunan");
+            ->with('successMessage', "Berhasil update pagu tahunan");
     }
 
     /**

@@ -59,6 +59,17 @@
               </div>
             </div>
             <div class="form-group row">
+              <label for="target_output" class="col-sm-2 col-form-label">{{ __('Target Output') }}</label>
+              <div class="col-md-4">
+                <input id="target_output" type="text" class="form-control{{ $errors->has('target_output') ? ' is-invalid' : '' }}" name="target_output" value="{{ old('target_output') }}">
+                @if ($errors->has('target_output'))
+                  <span class="d-block invalid-feedback" role="alert">
+                      <strong>{{ $errors->first('target_output') }}</strong>
+                  </span>
+                @endif
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="" class="col-sm-2 col-form-label"></label>
               <div class="col-sm-10">
                 <a href="{{ url('pagu-tahunan') }}" class="btn btn-default">
@@ -85,6 +96,11 @@
       $('#jumlah_anggaran').autoNumeric('init',{
         aSep:',',
         aDec:'.'
+      });
+      $('#target_output').autoNumeric('init',{
+        aSep:',',
+        aDec:'.',
+        mDec: '0'
       });
 
       $('#form-create').on('submit', function(){

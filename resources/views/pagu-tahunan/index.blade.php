@@ -41,6 +41,7 @@
                   <th>Tahun</th>
                   <th>Jumlah Anggaran</th>
                   <th>Saldo</th>
+                  <th>Target Output</th>
                   <th>Kasubag</th>
                   <th style="width:10%;text-align: center;">Action</th>
                 </tr>
@@ -69,11 +70,12 @@
           {data: 'tahun', name: 'tahun'},
           {data: 'jumlah_anggaran', name: 'jumlah_anggaran'},
           {data: 'balance', name: 'balance'},
+          {data: 'target_output', name: 'target_output'},
           {data: 'kasubag', name: 'kasubag', searchable:false, orderable:false},
           {data: 'action', name: 'action', searchable:false, orderable:false},
         ],
         columnDefs: [
-          { className: "text-center", "targets": [ 0, 5 ] }
+          { className: "text-center", "targets": [ 0, 6 ] }
         ]
       });
 

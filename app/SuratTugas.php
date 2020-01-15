@@ -15,7 +15,7 @@ class SuratTugas extends Model
     	'tanggal_mulai', 'tanggal_selesai', 'attachment'
     ];
 
-    protected $appends = ['background_type'];
+    protected $appends = ['background_type', 'pelaksana_kegiatan'];
 
     public function jenis_surat_tugas()
     {
@@ -64,5 +64,19 @@ class SuratTugas extends Model
         }
 
         return $bg_type;
+    }
+
+
+    public function getPelaksanaKegiatanAttribute()
+    {
+        $pelaksana_kegiatan = "";
+        if(count($this->users)){
+            foreach($this->users as $user){
+                $pelaksana_kegiatan.=$user->name.',';
+            }
+            return $pelaksana_kegiatan;
+        }else{
+            return NULL;
+        }
     }
 }

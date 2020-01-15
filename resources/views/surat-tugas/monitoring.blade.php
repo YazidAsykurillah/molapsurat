@@ -25,9 +25,30 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Monitoring Surat Tugas</h3>
-          <div class="card-tools"></div>
+          <div class="card-tools">
+            
+          </div>
         </div>
         <div class="card-body">
+          <form class="form-horizontal" id="form-filter">
+            <div class="form-group row">
+              <label for="filter_status_laporan_surat_tugas" class="col-sm-2 col-form-label">Satus Laporan ST</label>
+              <div class="col-sm-5">
+                <select name="filter_status_laporan_surat_tugas" id="filter_status_laporan_surat_tugas" class="form-control">
+                  <option value="">--Semua Status---</option>
+                  @foreach($status_laporan_surat_tugas_opt as $opt)
+                    <option value="{{ $opt }}">{{ status_laporan_surat_tugas($opt) }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="" class="col-sm-2 col-form-label"></label>
+              <div class="col-sm-5">
+                <button type="submit" class="btn btn-primary">Filter</button>
+              </div>
+            </div>
+          </form>
           <div class="table-responsive">
             <table id="table" class="table table-bordered">
               <thead>
@@ -35,6 +56,7 @@
                   <th style="width: 7%; text-align: center;">#</th>
                   <th style="width: 10%;"></th>
                   <th>Nomor</th>
+                  <th>Tanggal Surat Tugas</th>
                   <th>Jenis Kegiatan</th>
                   <th>Tujuan</th>
                   <th>Uraian</th>
@@ -48,7 +70,11 @@
             </table>
           </div>
         </div>
-        <div class="card-footer clearfix"></div>
+        <div class="card-footer clearfix">
+          <a class="btn btn-default btn-xs" id="btn-export-excel" href="{{ url('surat-tugas/export') }}">
+              <i class="fa fa-file-export"></i> Export XLSX
+            </a>
+        </div>
       </div>
     </div>
   </div>
@@ -87,7 +113,13 @@
       var table = $('#table').DataTable({
         processing :true,
         serverSide : true,
-        ajax : '{!! url('surat-tugas/monitoring-datatables') !!}',
+        //ajax : '{!! url('surat-tugas/monitoring-datatables') !!}',
+        ajax : {
+          url : '{!! url('surat-tugas/monitoring-datatables') !!}',
+          data: function(d){
+            d.filter_status_laporan_surat_tugas = $('select[name=filter_status_laporan_surat_tugas]').val();
+          }
+        },
         columns :[
           {data: 'rownum', name: 'rownum', searchable:false},
           {data: 'background_type', name: 'background_type', searchable:false, orderable:false, render:function(data, type, row, meta){
@@ -97,6 +129,7 @@
           {data: 'nomor', name: 'nomor', render:function(data, type, row, meta){
             return '<a href="{{ url('surat-tugas') }}/'+row.id+'">'+data+'</a>';
           }},
+          {data: 'tanggal', name: 'tanggal'},
           {data: 'judul_jenis_surat_tugas', name: 'jenis_surat_tugas.judul'},
           {data: 'nama_tujuan_surat_tugas', name: 'tujuan_surat_tugas.nama'},
           {data: 'uraian', name: 'uraian'},
@@ -114,6 +147,12 @@
         columnDefs: [
           { className: "text-center", "targets": [ 0 ] }
         ],
+      });
+
+
+      $('#form-filter').on('submit', function(e) {
+        table.draw();
+        e.preventDefault();
       });
 
     });

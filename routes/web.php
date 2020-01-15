@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('tujuan-surat-tugas', 'TujuanSuratTugasController');
 
 	//Surat Tugas
+	Route::get('surat-tugas/export', 'SuratTugasController@export');
 	Route::post('surat-tugas/delete', 'SuratTugasController@delete');
 	Route::get('surat-tugas/monitoring-datatables', 'SuratTugasController@MonitoringDatatables');
 	Route::get('surat-tugas/datatables', 'SuratTugasController@datatables');
@@ -77,5 +78,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('realisasi-keuangan/datatables', 'RealisasiKeuanganController@datatables');
 	Route::post('realisasi-keuangan/store', 'RealisasiKeuanganController@store');
 	Route::resource('realisasi-keuangan', 'RealisasiKeuanganController');
+
+
+	Route::get('chart-data-anggaran', 'HomeController@getChartDataAnggaran');
 
 });

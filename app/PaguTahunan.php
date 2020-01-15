@@ -9,7 +9,7 @@ class PaguTahunan extends Model
     protected $table = 'pagu_tahunan';
 
     protected $fillable = [
-    	'tahun', 'jumlah_anggaran'
+    	'tahun', 'jumlah_anggaran', 'target_output'
     ];
 
     public function pengajuan_keuangan()
