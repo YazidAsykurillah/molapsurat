@@ -25,8 +25,11 @@
         <div class="card-header">
           <h3 class="card-title">Daftar Pengguna</h3>
           <div class="card-tools">
-            <a class="btn btn-info btn-sm" href="{{ url('user/create') }}">
-              Tambah Pengguna
+            <a href="{{ url('user/import') }}" class="btn btn-default btn-xs" id="btn-import">
+              <i class="fa fa-upload"></i> Import
+            </a>
+            <a class="btn btn-info btn-xs" href="{{ url('user/create') }}">
+              <i class="fa fa-plus-circle"></i> Tambah Pengguna
             </a>
           </div>
         </div>

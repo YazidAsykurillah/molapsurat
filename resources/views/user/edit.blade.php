@@ -62,13 +62,19 @@
                       {{old('role_id') ? \App\Role::find(old('role_id'))->name : '---Select Role---'}}
                     </option>
                     @if($roles->count())
-                      @foreach($roles as $role)
-                        @if($role->id == $user->roles->first()->id)
-                        <option value="{{ $role->id}}" selected="selected">{{$role->name}}</option>
-                        @else  
-                        <option value="{{ $role->id}}">{{$role->name}}</option>
-                        @endif
-                      @endforeach
+                      @if($user->roles->count())
+                        @foreach($roles as $role)
+                          @if($role->id == $user->roles->first()->id)
+                          <option value="{{ $role->id}}" selected="selected">{{$role->name}}</option>
+                          @else  
+                          <option value="{{ $role->id}}">{{$role->name}}</option>
+                          @endif
+                        @endforeach
+                      @else
+                        @foreach($roles as $role)
+                          <option value="{{ $role->id}}">{{$role->name}}</option>
+                        @endforeach
+                      @endif
                     @endif
                   </select>
                   @if ($errors->has('role_id'))

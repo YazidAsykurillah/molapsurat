@@ -34,7 +34,9 @@
             <b class="d-block">{{ $user->email }}</b>
           </p>
           <p class="">Jabatan
+            @if($user->roles->count())
             <b class="d-block">{{ $user->roles->first()->name }}</b>
+            @endif
           </p>
         </div>
         <div class="card-footer clearfix">

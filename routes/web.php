@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('laporan-surat-tugas', 'LaporanSuratTugasController');
 
 	//User
+	Route::post('user/import', 'UserController@import');
+	Route::get('user/import', 'UserController@renderImportView');
 	Route::get('user/select2', 'UserController@select2');
 	Route::get('user/datatables', 'UserController@datatables');
 	Route::resource('user', 'UserController');

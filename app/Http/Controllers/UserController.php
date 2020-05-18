@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use DataTables;
-
+//User Maatwebsite Excel package
+use Excel;
 use App\User;
 use App\Role;
 
@@ -159,5 +160,59 @@ class UserController extends Controller
             $data = User::get();
         }
         return response()->json($data);
+    }
+
+    public function import(Request $request)
+    {
+        // return $request->all();
+        if($request->hasFile('file')){
+            config(['excel.import.startRow' => 10]);
+            $path = $request->file('file')->getRealPath();
+            $data = Excel::selectSheetsByIndex(0)->load($path, function($reader) {
+                $reader->noHeading = true;
+                $reader->ignoreEmpty();
+            })->get();
+            $to_insert = [];
+            foreach ($data as $key => $value) {
+                if($value[0]!=''){
+                    // $to_insert[] = ['name'=>$value[1], 'username'=>$value[2]];    
+                    array_push($to_insert,
+                        [
+                            'name'=>$value[1],
+                            'username'=>preg_replace('#[^0-9]#', '', $value[2]),
+                            'email'=>preg_replace('#[^0-9]#', '', $value[2])."@molasurat.localhost",
+                        ]
+                    );
+                }
+                    
+            }
+            /*echo '<pre>';
+            print_r($to_insert);
+            echo '</pre>';
+            exit();*/
+            foreach($to_insert as $res){
+               $user = User::updateOrCreate(
+                    ['username'=>$res['username']],
+                    [
+                        'name'=>$res['name'],
+                        'username'=>$res['username'],
+                        'email'=>$res['email'],
+                        'password'=>bcrypt('12345')
+                    ]
+               );
+            }
+        }
+        else{
+            return redirect()->back()
+            ->with('errorMessage', "No file to be imported");
+        }
+    }
+
+
+    public function renderImportView()
+    {
+        $roles = Role::all();
+        return view('user.import')
+            ->with('roles', $roles);
     }
 }
